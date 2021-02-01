@@ -64,6 +64,8 @@ public class Appointment_MenuController implements Initializable {
     private Button SubmitButton;
     @FXML
     private Button CancelButton;
+    
+    private boolean update = false;
 
     /**
      * Initializes the controller class.
@@ -86,6 +88,26 @@ public class Appointment_MenuController implements Initializable {
         
         AppStartMin.setItems(min);
         AppEndMin.setItems(min);
+    }
+
+    public void prefill (Appointments App) {                                         //PreFill all Customer info
+        update = true;
+        
+        AppID.setText( String.valueOf( App.getApointmentID() ) );
+        AppTitle.setText( App.getTitle() );
+        AppDescription.setText( App.getDescription() );
+        AppLocation.setText( App.getLocation() );
+        AppContact.setValue( App.getContact() );
+        AppType.setText( App.getType() );
+        ZonedDateTime convertedStart = App.getStartTimeObj().withZoneSameInstant( ZoneId.systemDefault() );
+        AppStartDate.setValue( convertedStart.toLocalDate() );
+        AppStartHr.setValue( convertedStart.getHour() );
+        AppStartMin.setValue( convertedStart.getMinute() );
+        ZonedDateTime convertedEnd = App.getEndTimeObj().withZoneSameInstant( ZoneId.systemDefault() );
+        AppEndDate.setValue( convertedEnd.toLocalDate() );
+        AppEndHr.setValue( convertedEnd.getHour() );
+        AppEndMin.setValue( convertedEnd.getMinute() );
+        AppCustomer.setValue( App.getCustomer() );
     }    
 
     @FXML
@@ -93,7 +115,7 @@ public class Appointment_MenuController implements Initializable {
         String tmp;
         tmp = AppID.getText();
         int ID = 0;
-        //if( tmp != null ) ID = Integer.parseInt(tmp);
+        if( update ) ID = Integer.parseInt( tmp );
         
         String title = AppTitle.getText();
         String des = AppDescription.getText();
@@ -121,7 +143,8 @@ public class Appointment_MenuController implements Initializable {
         Customers customer = AppCustomer.getValue();
         
         try {
-            mysql.database.addAppointment(new Appointments(ID, title, des, Loc, contact, type, begin.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), end.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), customer ));
+            if( update ) ;
+            else mysql.database.addAppointment(new Appointments(ID, title, des, Loc, contact, type, begin.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), end.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), customer ));
         
         }
         catch ( Exception e ) {

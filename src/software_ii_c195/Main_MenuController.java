@@ -211,6 +211,23 @@ public class Main_MenuController implements Initializable {
 
     @FXML
     private void appointmentUpdate(ActionEvent event) {
+        Appointments selected = Appointment_Table.getSelectionModel().getSelectedItem();
+        
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Appointment_Menu.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("CalenDo - Update Appointment");
+            stage.setScene(scene);
+            stage.show();
+            
+            Appointment_MenuController controller = loader.getController();
+            controller.prefill(selected);
+        }
+        catch(IOException e) {
+            System.out.println("SQL ERROR!!! " + e);
+        }
     }
 
     @FXML

@@ -11,7 +11,7 @@ import java.time.ZoneId;
 
 /**
  *
- * @author Admin Git Testhghjghjghjgjhgjhg
+ * @author Admin
  */
 
 public class mysql {
@@ -256,5 +256,23 @@ public class mysql {
         String begin = Main_MenuController.startView.withZoneSameInstant(ZoneId.of("UTC+0")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String end = Main_MenuController.endView.withZoneSameInstant(ZoneId.of("UTC+0")).format(DateTimeFormatter.ISO_LOCAL_DATE);
         updateAppointmentList(begin, end);
+    }
+    
+    public void updateAppointment( Appointments App ) throws SQLException {
+//        System.out.print("Making Sql Statement... ");
+//        String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Update = NOW(), Last_Updated_By = ?, Division_ID = ? WHERE Customer_ID = ?;";
+//        PreparedStatement ps = conn.prepareStatement(sql);
+//        System.out.print("Done!\nFilling in variables... ");
+//        ps.setString(1, C.getCustomer_Name());
+//        ps.setString(2, C.getAddress());
+//        ps.setString(3, C.getPostal_Code());
+//        ps.setString(4, C.getPhone());
+//        ps.setString(5, verifiedUserLogin);
+//        ps.setInt(6, C.getDivision().getDivisionID());
+//        ps.setInt(7, C.getCustomer_ID());
+//        System.out.print("Done!\nExecute Query... ");
+//        ps.executeUpdate();
+//        System.out.print("Done!\nUpdate Cutomers...\n");
+//        updateCustomerList();
     }
 }

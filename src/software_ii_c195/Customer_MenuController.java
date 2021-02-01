@@ -42,7 +42,7 @@ public class Customer_MenuController implements Initializable {
     @FXML
     private ComboBox<Countries> Customer_Country;
     
-    public boolean update = false;
+    private boolean update = false;
 
     /**
      * Initializes the controller class.

@@ -23,15 +23,15 @@ public class Appointments {
     
     public static ObservableList<Appointments> appointmentList = FXCollections.observableArrayList();
     
-    public SimpleIntegerProperty apointmentID;
-    public SimpleStringProperty title;
-    public SimpleStringProperty description;
-    public SimpleStringProperty location;
-    public Contacts contact;
-    public SimpleStringProperty type;
-    public ZonedDateTime startTime;
-    public ZonedDateTime endTime;
-    public Customers customer;
+    private final SimpleIntegerProperty apointmentID;
+    private final SimpleStringProperty title;
+    private final SimpleStringProperty description;
+    private final SimpleStringProperty location;
+    private final Contacts contact;
+    private final SimpleStringProperty type;
+    private final ZonedDateTime startTime;
+    private final ZonedDateTime endTime;
+    private final Customers customer;
     
     public Appointments(int ID, String Title, String Description, String Location, Contacts Contact, String Type, String Start, String End, Customers Customer) {
         this.apointmentID = new SimpleIntegerProperty(ID);
@@ -78,6 +78,10 @@ public class Appointments {
         return localTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
     
+    public ZonedDateTime getStartTimeObj() {
+        return this.startTime;
+    }
+    
     public String getStartTimeUTC() {
         ZonedDateTime localTime = this.startTime;
         return localTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -86,6 +90,10 @@ public class Appointments {
     public String getEndTime() {
         ZonedDateTime localTime = this.endTime.withZoneSameInstant( ZoneId.systemDefault() );
         return localTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+    
+    public ZonedDateTime getEndTimeObj() {
+        return this.endTime;
     }
     
     public String getEndTimeUTC() {
