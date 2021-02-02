@@ -143,8 +143,9 @@ public class Appointment_MenuController implements Initializable {
         Customers customer = AppCustomer.getValue();
         
         try {
-            if( update ) ;
-            else mysql.database.addAppointment(new Appointments(ID, title, des, Loc, contact, type, begin.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), end.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), customer ));
+            Appointments app = new Appointments(ID, title, des, Loc, contact, type, begin.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), end.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), customer );
+            if( update ) mysql.database.updateAppointment( app);
+            else mysql.database.addAppointment( app );
         
         }
         catch ( Exception e ) {
