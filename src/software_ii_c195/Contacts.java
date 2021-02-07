@@ -16,39 +16,45 @@ import javafx.collections.ObservableList;
  */
 public class Contacts {
     
+        //List object made to contain all contacts
         public static ObservableList<Contacts> contactList = FXCollections.observableArrayList();
         
-        private SimpleIntegerProperty contactID;
-        private SimpleStringProperty contactName;
-        private SimpleStringProperty contactEmail;
+        private final SimpleIntegerProperty contactID;
+        private final SimpleStringProperty contactName;
+        private final SimpleStringProperty contactEmail;
         
-        public Contacts(int ID, String Name, String Email) {
-            this.contactID = new SimpleIntegerProperty(ID);
-            this.contactName = new SimpleStringProperty(Name);
-            this.contactEmail = new SimpleStringProperty(Email);
+        public Contacts( int id, String name, String email ) {
+            this.contactID = new SimpleIntegerProperty( id );
+            this.contactName = new SimpleStringProperty( name );
+            this.contactEmail = new SimpleStringProperty( email );
         }
         
+        //get contact ID
         public int getID() {
             return this.contactID.get();
         }
         
+        //get contact name
         public String getName() {
             return this.contactName.get();
         }
         
+        //get contact email
         public String getEmail() {
             return this.contactEmail.get();
         }
         
-        public static Contacts findContactByID(int ID) {
+        //find contact by Id 
+        public static Contacts findContactByID( int id ) {
             int i = 0;
             while( i < contactList.size() ) {
-                if( ID == contactList.get(i).getID() ) return contactList.get(i);
+                if( id == contactList.get(i).getID() ) return contactList.get( i );
                 i++;
             }
             return null;
         }
         
+        //convert contact object to string just the name for the table
         @Override
         public String toString() {
             return this.getName();

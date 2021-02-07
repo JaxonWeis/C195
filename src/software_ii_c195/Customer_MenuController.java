@@ -12,7 +12,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
@@ -23,10 +22,6 @@ import javafx.scene.control.TextField;
  */
 public class Customer_MenuController implements Initializable {
 
-    @FXML
-    private Button Customer_Submit;
-    @FXML
-    private Button Customer_Cancel;
     @FXML
     private TextField Customer_ID;
     @FXML
@@ -48,57 +43,60 @@ public class Customer_MenuController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {                        //Initialize with Division disabled until country selected 
-        Customer_Div.setDisable(true);
-        Customer_Country.setItems(Countries.countryList);
+    public void initialize( URL url, ResourceBundle rb ) {
+        Customer_Div.setDisable( true );
+        Customer_Country.setItems( Countries.countryList );
     }
 
-    public void prefill (Customers C) {                                         //PreFill all Customer info
+    //This function is used to prefill the form and set it to update
+    public void prefill ( Customers cus ) {
         update = true;
         
-        Customer_ID.setText(String.valueOf(C.getCustomer_ID()));
-        Customer_Name.setText(C.getCustomer_Name());
-        Customer_Add.setText(C.getAddress());
-        Customer_Post.setText(C.getPostal_Code());
-        Customer_Phone.setText(C.getPhone());
-        Customer_Country.setValue(C.getDivision().getCounry());
-        Customer_Div.setValue(C.getDivision());
+        Customer_ID.setText( String.valueOf( cus.getID() ) );
+        Customer_Name.setText( cus.getName() );
+        Customer_Add.setText( cus.getAddress() );
+        Customer_Post.setText( cus.getPostalCode() );
+        Customer_Phone.setText( cus.getPhone() );
+        Customer_Country.setValue( cus.getDivision().getCountry() );
+        Customer_Div.setValue( cus.getDivision() );
     }
 
+    //this function runs when the submit button is pressed creates a temp cutomer and sends it to the database
     @FXML
-    private void customerSubmit(ActionEvent event) {                            //Submit button is hit
-        System.out.print("Submit button hit!\ncreating temp customer...");
+    private void customerSubmit( ActionEvent event ) {
+        System.out.print( "Submit button hit!\ncreating temp customer..." );
         int tempID = 0;
-        if (update) tempID = Integer.parseInt(Customer_ID.getText());           // fill in tempID if updating customer
+        if ( update ) tempID = Integer.parseInt( Customer_ID.getText() );
         String tempName = Customer_Name.getText();
         String tempAdd = Customer_Add.getText();
         String tempPost = Customer_Post.getText();
         String tempPhone = Customer_Phone.getText();
         Divisions tempDiv = Customer_Div.getValue();
-        Customers C = new Customers(tempID, tempName, tempAdd, tempPost, tempPhone, tempDiv);
-        System.out.print(C.getCustomer_Name());
-        System.out.print(" Done!\n\tPass temp Customer to mysql...\n");
+        Customers cus = new Customers( tempID, tempName, tempAdd, tempPost, tempPhone, tempDiv );
+        System.out.print( cus.getName() );
+        System.out.print( " Done!\n\tPass temp Customer to mysql...\n" );
         try {
-            if (!update) mysql.database.addCustomer(C);
-            if (update) mysql.database.updateCustomer(C);
+            if ( update ) mysql.database.updateCustomer( cus );
+            else mysql.database.addCustomer( cus );
         }
-        catch (SQLException e) {
-            System.out.println("SQL ERROR!!! " + e);
+        catch ( SQLException e ) {
+            System.out.println( "SQL ERROR!!! " + e );
         }
-        System.out.print("MySQL Done!\n");
-        ((Node)(event.getSource())).getScene().getWindow().hide();
+        System.out.print( "MySQL Done!\n" );
+        ( ( Node )( event.getSource() ) ).getScene().getWindow().hide();
     }
 
+    //function that runs when cancel button is hit
     @FXML
-    private void customerCancel(ActionEvent event) {
-        ((Node)(event.getSource())).getScene().getWindow().hide();
+    private void customerCancel( ActionEvent event ) {
+        ( ( Node ) ( event.getSource() ) ).getScene().getWindow().hide();
     }
 
+    //when the country is seleced update the division list
     @FXML
-    private void CountryChange(ActionEvent event) {
+    private void CountryChange( ActionEvent event ) {
         Countries selected = Customer_Country.getValue();
-        Customer_Div.setDisable(false);
-        Customer_Div.setItems(Divisions.getDivByCountry(selected));
+        Customer_Div.setDisable( false );
+        Customer_Div.setItems( Divisions.getDivisionByCountry( selected ) );
     }
-    
 }

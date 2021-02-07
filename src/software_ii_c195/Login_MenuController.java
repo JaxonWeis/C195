@@ -50,60 +50,69 @@ public class Login_MenuController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+    public void initialize( URL url, ResourceBundle rb ) {
         Platform.runLater( () -> root.requestFocus() );
-        Login_ErrorMsg.setText("");
+        
+        //Clear error message
+        Login_ErrorMsg.setText( "" );
+        
+        //Show country name and zone Id
         Locale current = Locale.getDefault();
         String Country_Name = current.getDisplayCountry();
-        String Zone_ID = ZoneId.systemDefault().getDisplayName(TextStyle.FULL, current);
-        Login_ZoneID.setText(Country_Name + " - " + Zone_ID);
+        String Zone_ID = ZoneId.systemDefault().getDisplayName( TextStyle.FULL, current );
+        Login_ZoneID.setText( Country_Name + " - " + Zone_ID );
         
         try {
+            //Try to setup the database
             mysql.database = new mysql();
         }
-        catch(SQLException e) {
-            System.out.println("Database Failed!!! " + e.toString());
+        catch( SQLException e ) {
+            System.out.println( "Database Setup Failed!!! " + e );
         }
     }    
 
+    //Run this function when login button hit
     @FXML
-    private void login_Action(ActionEvent event) {
-        System.out.println("Login Button hit...");
+    private void login_Action( ActionEvent event ) {
+        System.out.println( "Login Button hit..." );
+        
+        //Clear error message
         Login_ErrorMsg.setText("");
+        
+        //fetch user and pass
         String User = Login_Email.getText();
         String Pass = Login_Password.getText();
         boolean verifyUser = false;
         
+        //Check database for matching username and password
         try {
-            verifyUser = mysql.database.verifyUser(User, Pass);
+            verifyUser = mysql.database.verifyUser( User, Pass );
         }
-        catch(SQLException e)
+        catch( SQLException e )
         {
-            System.out.println("Database Failed!!! " + e.toString());
+            System.out.println( "Database Failed!!! " + e );
         }
         
-        if(verifyUser) {
-            System.out.println("Login Sucessful!");
+        if( verifyUser ) {
+            System.out.println( "Login Sucessful!" );
             try {
-                Parent root = FXMLLoader.load(getClass().getResource("Main_Menu.fxml"));
-                Scene scene = new Scene(root);
+                Parent root = FXMLLoader.load( getClass().getResource( "Main_Menu.fxml" ) );
+                Scene scene = new Scene( root );
                 Stage stage = new Stage();
-                stage.setTitle("CalenDo - Main");
-                stage.setScene(scene);
+                stage.setTitle( "CalenDo - Main" );
+                stage.setScene( scene );
                 stage.show();
                 
-                ((Node)(event.getSource())).getScene().getWindow().hide();
+                ( ( Node )( event.getSource() ) ).getScene().getWindow().hide();
             }
-            catch(IOException e) {
-                
+            catch( IOException e ) {
+                System.out.println( "Error!!! " + e );
             }
-            
         }
         else
         {
-            System.out.println("Login Error!!!");
-            Login_ErrorMsg.setText("Login Failed!");
+            System.out.println( "Login Error!!!" );
+            Login_ErrorMsg.setText( "Login Failed!" );
         }
     }   
 }

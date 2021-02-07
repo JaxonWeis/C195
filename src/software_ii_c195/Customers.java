@@ -18,55 +18,63 @@ public class Customers {
     
     public static ObservableList<Customers> customerList = FXCollections.observableArrayList();
     
-    private final SimpleIntegerProperty Customer_ID;
-    private final SimpleStringProperty Customer_Name;
-    private final SimpleStringProperty Address;
-    private final SimpleStringProperty Postal_Code;
-    private final SimpleStringProperty Phone;
-    private Divisions division;
+    private final SimpleIntegerProperty ID;
+    private final SimpleStringProperty name;
+    private final SimpleStringProperty address;
+    private final SimpleStringProperty postalCode;
+    private final SimpleStringProperty phone;
+    private final Divisions division;
     
-    public Customers(int id, String name, String add, String post, String phone, Divisions div) { //Contructor
-        this.Customer_ID = new SimpleIntegerProperty(id);
-        this.Customer_Name = new SimpleStringProperty(name);
-        this.Address = new SimpleStringProperty(add);
-        this.Postal_Code = new SimpleStringProperty(post);
-        this.Phone = new SimpleStringProperty(phone);
+    public Customers( int id, String name, String add, String post, String phone, Divisions div ) {
+        this.ID = new SimpleIntegerProperty( id );
+        this.name = new SimpleStringProperty( name );
+        this.address = new SimpleStringProperty( add );
+        this.postalCode = new SimpleStringProperty( post );
+        this.phone = new SimpleStringProperty( phone );
         this.division = div;
     }
     
-    public int getCustomer_ID() {
-        return this.Customer_ID.get();
+    //get customer id
+    public int getID() {
+        return this.ID.get();
     }
     
-    public String getCustomer_Name() {
-        return this.Customer_Name.get();
+    //get customer Name
+    public String getName() {
+        return this.name.get();
     }
     
+    //get customer address
     public String getAddress() {
-        return this.Address.get();
+        return this.address.get();
     }
     
-    public String getPostal_Code() {
-        return this.Postal_Code.get();
+    //get customer postal code
+    public String getPostalCode() {
+        return this.postalCode.get();
     }
     
+    //get customer phone
     public String getPhone() {
-        return this.Phone.get();
+        return this.phone.get();
     }
     
+    //get customer division
     public Divisions getDivision() {
         return this.division;
     }
     
+    //convert cutomer object to string by returning customer name
     @Override
     public String toString() {
-        return this.getCustomer_Name();
+        return this.getName();
     }
     
-    public static Customers getCustomerByID(int ID) {
+    //return customer object by entering its ID number
+    public static Customers getCustomerByID( int ID ) {
         int i = 0;
         while( i < customerList.size() ) {
-            if( ID == customerList.get(i).getCustomer_ID() ) return customerList.get(i);
+            if( ID == customerList.get(i).getID() ) return customerList.get( i );
             i++;
         }
         return null;

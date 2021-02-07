@@ -14,37 +14,41 @@ import javafx.collections.ObservableList;
  */
 public class Countries {
     
+    //List object used to refrence all countrys
     public static ObservableList<Countries> countryList = FXCollections.observableArrayList();
     
     private final int countryID;
     private final String countryName;
     
-    public Countries(int ID, String Name) {
-        this.countryID = ID;
-        this.countryName = Name;
+    public Countries( int id, String name ) {
+        this.countryID = id;
+        this.countryName = name;
     }
     
-    public static Countries findCountry(int ID) {
+    //return a country object based on the Id passed
+    public static Countries findCountryById( int id ) {
         int i = 0;
         while ( i < countryList.size() ) {
-            if ( ID == countryList.get(i).countryID )
-                return countryList.get(i);
+            if ( id == countryList.get( i ).countryID )
+                return countryList.get( i );
             i++;
         }
         return null;
     }
     
+    //return country ID
     public int getCountryID() {
         return this.countryID;
     }
     
+    //return country name
     public String getCountryName() {
         return this.countryName;
     }
     
+    //convert object to string just name
     @Override
     public String toString() {
         return this.countryName;
     }
-    
 }

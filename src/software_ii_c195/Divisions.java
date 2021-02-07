@@ -12,54 +12,63 @@ import javafx.collections.ObservableList;
  *
  * @author Admin
  */
-public class Divisions {
+public class Divisions{
     
+    //Object where all divisions are held
     public static ObservableList<Divisions> divisionList = FXCollections.observableArrayList();
     
-    private final int divisionID;
-    private final String divisionName;
+    //Variables that are part of each object
+    private final int ID;
+    private final String name;
     private final Countries country;
     
-    public Divisions (int ID, String name, Countries country) {
-        this.divisionID = ID;
-        this.divisionName = name;
+    //Contructor
+    public Divisions ( int ID, String name, Countries country ) {
+        this.ID = ID;
+        this.name = name;
         this.country = country;
     }
     
-    public static Divisions findDivision(int ID) {
-                int i = 0;
+    //Return division object when passing corrisponding id
+    public static Divisions findDivisionByID( int ID ) {
+        int i = 0;
         while ( i < divisionList.size() ) {
-            if ( ID == divisionList.get(i).divisionID )
-                return divisionList.get(i);
+            if ( ID == divisionList.get( i ).getID() )
+                return divisionList.get( i );
             i++;
         }
         return null;
     }
     
-    public int getDivisionID() {
-        return this.divisionID;
+    //get ID of division object
+    public int getID() {
+        return this.ID;
     }
     
-    public String getDivisionName() {
-        return this.divisionName;
+    //get Name of division object
+    public String getName() {
+        return this.name;
     }
     
-    public Countries getCounry() {
+    //return country object of division object
+    public Countries getCountry() {
         return this.country;
     }
     
+    //override string of object by returning name
     @Override
     public String toString() {
-        return this.divisionName;
+        return this.name;
     }
     
-    public static ObservableList<Divisions> getDivByCountry(Countries country) {
+    //return list of divisions  of certain country
+    public static ObservableList<Divisions> getDivisionByCountry( Countries country ) {
         ObservableList<Divisions> temp = FXCollections.observableArrayList();
         
         int i = 0;
-        while (i < divisionList.size()) {
-            if (country == divisionList.get(i).country)
-                temp.add(divisionList.get(i));
+        while ( i < divisionList.size() ) {
+            if ( country == divisionList.get( i ).getCountry() )
+                temp.add( divisionList.get( i ) );
             i++;
         }
         return temp;

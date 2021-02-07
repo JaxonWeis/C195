@@ -6,23 +6,19 @@
 package software_ii_c195;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -60,10 +56,6 @@ public class Appointment_MenuController implements Initializable {
     private ComboBox<Integer> AppEndMin;
     @FXML
     private ComboBox<Customers> AppCustomer;
-    @FXML
-    private Button SubmitButton;
-    @FXML
-    private Button CancelButton;
     
     private boolean update = false;
 
@@ -71,47 +63,55 @@ public class Appointment_MenuController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        AppContact.setItems(Contacts.contactList);
-        AppCustomer.setItems(Customers.customerList);
+    public void initialize( URL url, ResourceBundle rb ) {
+        //fill combo boxes with lists
+        AppContact.setItems( Contacts.contactList );
+        AppCustomer.setItems( Customers.customerList );
         
+        //Make an observable list with 0-23 hour options
         ObservableList<Integer> hr = FXCollections.observableArrayList();
         int i = 0;
         while( i < 24 ) {
-            hr.add(i);
+            hr.add( i );
             i++;
         }
-        AppStartHr.setItems(hr);
-        AppEndHr.setItems(hr);
         
-        ObservableList<Integer> min = FXCollections.observableArrayList(0, 15, 30, 45);
+        //fill hour combo boxes with hr list
+        AppStartHr.setItems( hr );
+        AppEndHr.setItems( hr );
         
-        AppStartMin.setItems(min);
-        AppEndMin.setItems(min);
+        //make list with 0, 15, 30, 45
+        ObservableList<Integer> min = FXCollections.observableArrayList( 0, 15, 30, 45 );
+        
+        //fill min combo boxes with min list
+        AppStartMin.setItems( min );
+        AppEndMin.setItems( min );
     }
 
-    public void prefill (Appointments App) {                                         //PreFill all Customer info
+    //This function fills in the form from the passed variable and sets update to true
+    public void prefill ( Appointments app ) {                                         //PreFill all Customer info
         update = true;
         
-        AppID.setText( String.valueOf( App.getApointmentID() ) );
-        AppTitle.setText( App.getTitle() );
-        AppDescription.setText( App.getDescription() );
-        AppLocation.setText( App.getLocation() );
-        AppContact.setValue( App.getContact() );
-        AppType.setText( App.getType() );
-        ZonedDateTime convertedStart = App.getStartTimeObj().withZoneSameInstant( ZoneId.systemDefault() );
+        AppID.setText( String.valueOf( app.getApointmentID() ) );
+        AppTitle.setText( app.getTitle() );
+        AppDescription.setText( app.getDescription() );
+        AppLocation.setText( app.getLocation() );
+        AppContact.setValue( app.getContact() );
+        AppType.setText( app.getType() );
+        ZonedDateTime convertedStart = app.getStartTimeObj().withZoneSameInstant( ZoneId.systemDefault() );
         AppStartDate.setValue( convertedStart.toLocalDate() );
         AppStartHr.setValue( convertedStart.getHour() );
         AppStartMin.setValue( convertedStart.getMinute() );
-        ZonedDateTime convertedEnd = App.getEndTimeObj().withZoneSameInstant( ZoneId.systemDefault() );
+        ZonedDateTime convertedEnd = app.getEndTimeObj().withZoneSameInstant( ZoneId.systemDefault() );
         AppEndDate.setValue( convertedEnd.toLocalDate() );
         AppEndHr.setValue( convertedEnd.getHour() );
         AppEndMin.setValue( convertedEnd.getMinute() );
-        AppCustomer.setValue( App.getCustomer() );
+        AppCustomer.setValue( app.getCustomer() );
     }    
 
+    //function runs when the submit button is pressed if update true send appointment to update if not make an appointment
     @FXML
-    private void AppSubmit(ActionEvent event) {
+    private void AppSubmit( ActionEvent event ) {
         String tmp;
         tmp = AppID.getText();
         int ID = 0;
@@ -128,32 +128,33 @@ public class Appointment_MenuController implements Initializable {
         String startMin = AppStartMin.getValue().toString();
         if( startHr.length() < 2 ) startHr = "0" + startHr;
         if( startMin.length() < 2 ) startMin = "0" + startMin;
-        System.out.print(startHr + ":" + startMin);
-        LocalTime beginTime = LocalTime.parse(startHr + ":" + startMin, DateTimeFormatter.ISO_TIME);
-        ZonedDateTime begin = ZonedDateTime.of(beginDate, beginTime, ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC+0"));
+        System.out.print( startHr + ":" + startMin );
+        LocalTime beginTime = LocalTime.parse( startHr + ":" + startMin, DateTimeFormatter.ISO_TIME );
+        ZonedDateTime begin = ZonedDateTime.of( beginDate, beginTime, ZoneId.systemDefault()).withZoneSameInstant( ZoneId.of( "UTC+0" ) );
         
         LocalDate endDate = AppEndDate.getValue();
         String endHr = AppEndHr.getValue().toString();
         String endMin = AppEndMin.getValue().toString();
         if( endHr.length() < 2 ) endHr = "0" + endHr;
         if( endMin.length() < 2 ) endMin = "0" + endMin;
-        LocalTime endTime = LocalTime.parse(endHr + ":" + endMin, DateTimeFormatter.ISO_TIME);
-        ZonedDateTime end = ZonedDateTime.of(endDate, endTime, ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC+0"));
+        LocalTime endTime = LocalTime.parse( endHr + ":" + endMin, DateTimeFormatter.ISO_TIME );
+        ZonedDateTime end = ZonedDateTime.of( endDate, endTime, ZoneId.systemDefault() ).withZoneSameInstant( ZoneId.of( "UTC+0" ) );
         
         Customers customer = AppCustomer.getValue();
         
         try {
-            Appointments app = new Appointments(ID, title, des, Loc, contact, type, begin.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), end.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), customer );
-            if( update ) mysql.database.updateAppointment( app);
+            Appointments app = new Appointments( ID, title, des, Loc, contact, type, begin.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), end.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), customer );
+            if( update ) mysql.database.updateAppointment( app );
             else mysql.database.addAppointment( app );
         
         }
-        catch ( Exception e ) {
-            System.out.println("SQL Error!!! " + e);
+        catch ( SQLException e ) {
+            System.out.println( "SQL Error!!! " + e );
         }
-        ((Node)(event.getSource())).getScene().getWindow().hide();
+        ( ( Node ) ( event.getSource() ) ).getScene().getWindow().hide();
     }
 
+    //Runs when the cancel button is pressed and closed the window
     @FXML
     private void AppCancel(ActionEvent event) {
         ((Node)(event.getSource())).getScene().getWindow().hide();

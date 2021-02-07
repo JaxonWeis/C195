@@ -11,7 +11,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -33,71 +32,85 @@ public class Appointments {
     private final ZonedDateTime endTime;
     private final Customers customer;
     
-    public Appointments(int ID, String Title, String Description, String Location, Contacts Contact, String Type, String Start, String End, Customers Customer) {
-        this.apointmentID = new SimpleIntegerProperty(ID);
-        this.title = new SimpleStringProperty(Title);
-        this.description = new SimpleStringProperty(Description);
-        this.location = new SimpleStringProperty(Location);
+    //Contructor
+    public Appointments( int ID, String Title, String Description, String Location, Contacts Contact, String Type, String Start, String End, Customers Customer ) {
+        this.apointmentID = new SimpleIntegerProperty( ID );
+        this.title = new SimpleStringProperty( Title );
+        this.description = new SimpleStringProperty( Description );
+        this.location = new SimpleStringProperty( Location );
         this.contact = Contact;
-        this.type = new SimpleStringProperty(Type);
-        this.startTime = ZonedDateTime.of(LocalDateTime.parse(Start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), ZoneId.of("UTC+0"));
-        this.endTime = ZonedDateTime.of(LocalDateTime.parse(End, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), ZoneId.of("UTC+0"));
+        this.type = new SimpleStringProperty( Type );
+        this.startTime = ZonedDateTime.of( LocalDateTime.parse( Start, DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), ZoneId.of( "UTC+0" ) );
+        this.endTime = ZonedDateTime.of( LocalDateTime.parse( End, DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), ZoneId.of( "UTC+0" ) );
         this.customer = Customer;
     }
     
+    //Gets appointment ID
     public int getApointmentID() {
         return this.apointmentID.get();
     }
     
+    //Gets appointment title
     public String getTitle() {
         return this.title.get();
     }
     
+    //Get Appointment Description
     public String getDescription() {
         return this.description.get();
     }
     
+    //get Appointment Location
     public String getLocation() {
         return this.location.get();
     }
     
+    //get appointment type
     public String getType() {
         return this.type.get();
     }
     
+    //get appointment contact
     public Contacts getContact() {
         return this.contact;
     }
     
+    //get appointment customer
     public Customers getCustomer() {
         return this.customer;
     }
     
+    //get appointment start time in local time zone
     public String getStartTime() {
         ZonedDateTime localTime = this.startTime.withZoneSameInstant( ZoneId.systemDefault() );
-        return localTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        return localTime.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm" ) );
     }
     
+    //get appointment start time as a ZonedDateTime object
     public ZonedDateTime getStartTimeObj() {
         return this.startTime;
     }
     
+    //get appointment start time in UTC time zone
     public String getStartTimeUTC() {
         ZonedDateTime localTime = this.startTime;
-        return localTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        return localTime.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) );
     }
     
+    //get appointment end time in local time zone
     public String getEndTime() {
         ZonedDateTime localTime = this.endTime.withZoneSameInstant( ZoneId.systemDefault() );
-        return localTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        return localTime.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm" ) );
     }
     
+    //get appointment end time as a Zoned Date time Obect
     public ZonedDateTime getEndTimeObj() {
         return this.endTime;
     }
     
+    //get appointment end time in UTC time zone
     public String getEndTimeUTC() {
         ZonedDateTime localTime = this.endTime;
-        return localTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        return localTime.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) );
     }
 }

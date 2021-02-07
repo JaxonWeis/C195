@@ -16,7 +16,8 @@ import java.time.ZoneId;
 
 public class mysql {
     
-    public static mysql database;                                               //database object all pages use to interact with the database
+    //database object all pages use to interact with the database
+    public static mysql database;
     
     //Editable Database data
     private final String DBUser = "U05XJp";
@@ -26,15 +27,16 @@ public class mysql {
     private final String DBName = "WJ05XJp";
     private final String DBType = "mysql";
     
+    //Commection object class uses to connect to database
     private final Connection conn;                                                    
-    private int verifiedUserID;                                                 //keep verified user on hand ID and Login
+    private int verifiedUserID;
     private String verifiedUserLogin;
     
     //Contructor sets up connections and connects
     public mysql() throws SQLException{
         System.out.print( "Setting up Connection... " );
         String url = "jdbc:" + DBType + "://" + DBUrl +  ":" + DBPort + "/" + DBName + "?autoReconnect=true";
-        conn = DriverManager.getConnection( url, DBUser, DBPassword );
+        this.conn = DriverManager.getConnection( url, DBUser, DBPassword );
         System.out.print( "Done!\n" );
     }
 
@@ -44,7 +46,7 @@ public class mysql {
         
         //Setting up query and getting result
         String sql = "SELECT * FROM users WHERE User_Name=?;";
-        PreparedStatement ps = conn.prepareStatement( sql );
+        PreparedStatement ps = this.conn.prepareStatement( sql );
         ps.setString( 1, User );
         ResultSet rs = ps.executeQuery();
         
@@ -56,8 +58,8 @@ public class mysql {
             System.out.print( "Done!\n" );
             this.verifiedUserID = rs.getInt( "User_ID" );
             this.verifiedUserLogin = rs.getString( "User_Name" );
-            System.out.println( "\tUserID: " + database.verifiedUserID 
-                            + " User Login: " + database.verifiedUserLogin 
+            System.out.println( "\tUserID: " + this.verifiedUserID 
+                            + " User Login: " + this.verifiedUserLogin 
                             + "... Logged in!" );
             return true;
         }
@@ -70,7 +72,7 @@ public class mysql {
         //Sending SQL Query and getting result set
         System.out.print( "\tSending SQL Query..." );
         String sql = "SELECT * FROM countries;";
-        PreparedStatement ps = conn.prepareStatement( sql );
+        PreparedStatement ps = this.conn.prepareStatement( sql );
         ResultSet rs = ps.executeQuery();
         
         //Make sure country list is empty        
@@ -90,7 +92,7 @@ public class mysql {
         //Sending SQL Query and getting result set
         System.out.print( "\tSending SQL Query..." );
         String sql = "SELECT * FROM first_level_divisions;";
-        PreparedStatement ps = conn.prepareStatement( sql );
+        PreparedStatement ps = this.conn.prepareStatement( sql );
         ResultSet rs = ps.executeQuery();
         
         //makeing sure division list is clear
@@ -100,7 +102,7 @@ public class mysql {
         //each line in the result set is parsed and added as a new object in the list
         System.out.print( "Done.\n\tAdding Results to Division List...\n" );
         while( rs.next() ) {
-            Divisions.divisionList.add( new Divisions( rs.getInt( "Division_ID" ), rs.getString( "Division" ), Countries.findCountry( rs.getInt( "Country_ID" ) ) ) );
+            Divisions.divisionList.add( new Divisions( rs.getInt( "Division_ID" ), rs.getString( "Division" ), Countries.findCountryById( rs.getInt( "Country_ID" ) ) ) );
         }
         System.out.println( "\t\tDivisions List Updated to size: " + Divisions.divisionList.size() + "\n\tDone!" );
     }
@@ -110,7 +112,7 @@ public class mysql {
         //Setting up SQL query and getting result set
         System.out.print( "\tSending SQL Query..." );
         String sql = "SELECT * FROM contacts;";
-        PreparedStatement ps = conn.prepareStatement( sql );
+        PreparedStatement ps = this.conn.prepareStatement( sql );
         ResultSet rs = ps.executeQuery();
         
         //Making sure contact list is clear
@@ -130,7 +132,7 @@ public class mysql {
         //Setting up SQL query and getting result set
         System.out.print( "\tSending SQL Query..." );
         String sql = "SELECT * FROM customers;";
-        PreparedStatement ps = conn.prepareStatement( sql );
+        PreparedStatement ps = this.conn.prepareStatement( sql );
         ResultSet rs = ps.executeQuery();
         
         //Clearing Customer List this could be full
@@ -140,7 +142,7 @@ public class mysql {
         //each line in the result set is parsed and added as a new object in the list
         System.out.print( "Done.\n\tAdding Results to Customer List...\n" );
         while( rs.next() ) {
-            Customers.customerList.add( new Customers( rs.getInt( "Customer_ID" ), rs.getString( "Customer_Name" ), rs.getString( "Address" ), rs.getString( "Postal_Code" ), rs.getString( "Phone" ), Divisions.findDivision( rs.getInt( "Division_ID" ) ) ) );
+            Customers.customerList.add( new Customers( rs.getInt( "Customer_ID" ), rs.getString( "Customer_Name" ), rs.getString( "Address" ), rs.getString( "Postal_Code" ), rs.getString( "Phone" ), Divisions.findDivisionByID(rs.getInt( "Division_ID" ) ) ) );
         }
         System.out.println( "\t\tCustomer List Updated to size: " + Customers.customerList.size() + "\n\tDone!" );
     }
@@ -150,15 +152,15 @@ public class mysql {
         //Setting up SQL query with variables added in
         System.out.print( "Making Sql Statement... " );
         String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Created_By, Last_Updated_By, Division_ID) VALUES (?, ?, ?, ?, ?, ?, ?);";
-        PreparedStatement ps = conn.prepareStatement(sql);
+        PreparedStatement ps = this.conn.prepareStatement(sql);
         System.out.print( "Done!\nFilling in variables... " );
-        ps.setString( 1, cus.getCustomer_Name() );
+        ps.setString( 1, cus.getName() );
         ps.setString( 2, cus.getAddress() );
-        ps.setString( 3, cus.getPostal_Code() );
+        ps.setString( 3, cus.getPostalCode() );
         ps.setString( 4, cus.getPhone() );
-        ps.setString( 5, verifiedUserLogin );
-        ps.setString( 6, verifiedUserLogin );
-        ps.setInt( 7, cus.getDivision().getDivisionID() );
+        ps.setString( 5, this.verifiedUserLogin );
+        ps.setString( 6, this.verifiedUserLogin );
+        ps.setInt( 7, cus.getDivision().getID() );
         //Execute Query
         System.out.print( "Done!\nExecute Query... " );
         ps.executeUpdate();
@@ -172,15 +174,15 @@ public class mysql {
         //Setting up SQL query with variables added in        
         System.out.print( "Making Sql Statement... " );
         String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Update = NOW(), Last_Updated_By = ?, Division_ID = ? WHERE Customer_ID = ?;";
-        PreparedStatement ps = conn.prepareStatement( sql );
+        PreparedStatement ps = this.conn.prepareStatement( sql );
         System.out.print( "Done!\nFilling in variables... " );
-        ps.setString( 1, cus.getCustomer_Name() );
+        ps.setString( 1, cus.getName() );
         ps.setString( 2, cus.getAddress() );
-        ps.setString( 3, cus.getPostal_Code() );
+        ps.setString( 3, cus.getPostalCode() );
         ps.setString( 4, cus.getPhone() );
-        ps.setString( 5, verifiedUserLogin );
-        ps.setInt( 6, cus.getDivision().getDivisionID() );
-        ps.setInt( 7, cus.getCustomer_ID() );
+        ps.setString( 5, this.verifiedUserLogin );
+        ps.setInt( 6, cus.getDivision().getID() );
+        ps.setInt( 7, cus.getID() );
         //Execute Query
         System.out.print( "Done!\nExecute Query... " );
         ps.executeUpdate();
@@ -196,9 +198,9 @@ public class mysql {
         //Setting up SQL query with variables added in        
         System.out.print( "Making Sql Statement... " );
         String sql = "DELETE FROM customers WHERE Customer_ID = ?;";
-        PreparedStatement ps = conn.prepareStatement( sql );
+        PreparedStatement ps = this.conn.prepareStatement( sql );
         System.out.print( "Done!\nFilling in variables... " );
-        ps.setInt( 1, cus.getCustomer_ID() );
+        ps.setInt( 1, cus.getID() );
         //Execute Query
         System.out.print( "Done!\nExecute Query... " );
         ps.executeUpdate();
@@ -212,7 +214,7 @@ public class mysql {
         //Setting up SQL query        
         System.out.print( "\tSending SQL Query..." );
         String sql = "SELECT * FROM appointments;";
-        PreparedStatement ps = conn.prepareStatement( sql );
+        PreparedStatement ps = this.conn.prepareStatement( sql );
         //Execute Query and read result set
         ResultSet rs = ps.executeQuery();
         
@@ -233,7 +235,7 @@ public class mysql {
         //Setting up SQL query with variables added in        
         System.out.print( "\tSending SQL Query..." );
         String sql = "SELECT * FROM appointments WHERE (End BETWEEN ? AND ?);";
-        PreparedStatement ps = conn.prepareStatement( sql );
+        PreparedStatement ps = this.conn.prepareStatement( sql );
         ps.setString( 1, timeStart );
         ps.setString( 2, timeEnd );
         //Execute Query and read result set
@@ -256,7 +258,7 @@ public class mysql {
         //Setting up SQL query with variables added in        
         System.out.print( "Making Sql Statement... " );
         String sql = "INSERT INTO appointments ( Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID ) VALUES ( ?, ?, ?, ?, ?, ?, ?, NOW(), ?, NOW(), ?, ?, ?, ?);";
-        PreparedStatement ps = conn.prepareStatement( sql );
+        PreparedStatement ps = this.conn.prepareStatement( sql );
         System.out.print( "Done!\nFilling in variables... " );
         ps.setInt( 1, app.getApointmentID() );
         ps.setString( 2, app.getTitle() );
@@ -265,10 +267,10 @@ public class mysql {
         ps.setString( 5, app.getType() );
         ps.setString( 6, app.getStartTimeUTC() );
         ps.setString( 7, app.getEndTimeUTC() );
-        ps.setString( 8, verifiedUserLogin );
-        ps.setString( 9, verifiedUserLogin );
-        ps.setInt( 10, app.getCustomer().getCustomer_ID() );
-        ps.setInt( 11, verifiedUserID );
+        ps.setString( 8, this.verifiedUserLogin );
+        ps.setString( 9, this.verifiedUserLogin );
+        ps.setInt( 10, app.getCustomer().getID() );
+        ps.setInt( 11, this.verifiedUserID );
         ps.setInt( 12, app.getContact().getID() );
         
         //Execute Query
@@ -287,7 +289,7 @@ public class mysql {
         //Setting up SQL query with variables added in        
         System.out.print( "Making Sql Statement... " );
         String sql = "DELETE FROM appointments WHERE Appointment_ID = ?;";
-        PreparedStatement ps = conn.prepareStatement( sql );
+        PreparedStatement ps = this.conn.prepareStatement( sql );
         System.out.print( "Done!\nFilling in variables... " );
         ps.setInt( 1, app.getApointmentID() );
         
@@ -307,9 +309,9 @@ public class mysql {
         //Setting up SQL query with variables added in        
         System.out.print( "Making Sql Statement... " );
         String sql = "DELETE FROM appointments WHERE Customer_ID = ?;";
-        PreparedStatement ps = conn.prepareStatement( sql );
+        PreparedStatement ps = this.conn.prepareStatement( sql );
         System.out.print( "Done!\nFilling in variables... " );
-        ps.setInt( 1, cus.getCustomer_ID() );
+        ps.setInt( 1, cus.getID() );
 
         //Execute Query
         System.out.print( "Done!\nExecute Query... " );
@@ -327,7 +329,7 @@ public class mysql {
         //Setting up SQL query with variables added in        
         System.out.print( "Making Sql Statement... " );
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Last_Update = NOW(), Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?;";
-        PreparedStatement ps = conn.prepareStatement( sql );
+        PreparedStatement ps = this.conn.prepareStatement( sql );
         System.out.print( "Done!\nFilling in variables... " );
         ps.setString( 1, app.getTitle() );
         ps.setString( 2, app.getDescription() );
@@ -335,9 +337,9 @@ public class mysql {
         ps.setString( 4, app.getType() );
         ps.setString( 5, app.getStartTimeUTC() );
         ps.setString( 6, app.getEndTimeUTC() );
-        ps.setString( 7, verifiedUserLogin );
-        ps.setInt( 8, app.getCustomer().getCustomer_ID() );
-        ps.setInt( 9, verifiedUserID );
+        ps.setString( 7, this.verifiedUserLogin );
+        ps.setInt( 8, app.getCustomer().getID() );
+        ps.setInt( 9, this.verifiedUserID );
         ps.setInt( 10, app.getContact().getID() );
         ps.setInt( 11, app.getApointmentID() );
 
