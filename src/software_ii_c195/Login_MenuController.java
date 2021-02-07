@@ -24,6 +24,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 /**
@@ -43,9 +44,12 @@ public class Login_MenuController implements Initializable {
     private PasswordField Login_Password;
     @FXML
     private BorderPane root;
+    @FXML
+    private Button loginBtn;
     
+    Locale locale = Locale.getDefault();
+    ResourceBundle rbLang = ResourceBundle.getBundle("Language.lang", locale );
     
-
     /**
      * Initializes the controller class.
      */
@@ -53,13 +57,19 @@ public class Login_MenuController implements Initializable {
     public void initialize( URL url, ResourceBundle rb ) {
         Platform.runLater( () -> root.requestFocus() );
         
+        //set menu language items
+        Login_Email.setPromptText( rbLang.getString( "Email" ) );
+        Login_Password.setPromptText( rbLang.getString( "Password" ) );
+        loginBtn.setText( rbLang.getString( "Login" ) );
+        
+        
+        
         //Clear error message
         Login_ErrorMsg.setText( "" );
         
         //Show country name and zone Id
-        Locale current = Locale.getDefault();
-        String Country_Name = current.getDisplayCountry();
-        String Zone_ID = ZoneId.systemDefault().getDisplayName( TextStyle.FULL, current );
+        String Country_Name = locale.getDisplayCountry();
+        String Zone_ID = ZoneId.systemDefault().getDisplayName( TextStyle.FULL, locale );
         Login_ZoneID.setText( Country_Name + " - " + Zone_ID );
         
         try {
@@ -112,7 +122,7 @@ public class Login_MenuController implements Initializable {
         else
         {
             System.out.println( "Login Error!!!" );
-            Login_ErrorMsg.setText( "Login Failed!" );
+            Login_ErrorMsg.setText( rbLang.getString("FailedLogin") );
         }
     }   
 }

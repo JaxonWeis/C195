@@ -16,18 +16,18 @@
    <bottom>
       <VBox BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="Login_ZoneID" alignment="CENTER" minWidth="280.0" text="Zone ID" />
-            <TextField fx:id="Login_Email" promptText="Email" style="-fx-background-radius: 12px;">
+            <Label fx:id="Login_ZoneID" alignment="CENTER" minWidth="280.0" text="*Blank*" />
+            <TextField fx:id="Login_Email" style="-fx-background-radius: 12px;">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </TextField>
-            <PasswordField fx:id="Login_Password" promptText="Password" style="-fx-background-radius: 12px;">
+            <PasswordField fx:id="Login_Password" style="-fx-background-radius: 12px;">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </PasswordField>
-            <Button defaultButton="true" minWidth="280.0" mnemonicParsing="false" onAction="#login_Action" prefWidth="280.0" style="-fx-background-color: e96645; -fx-background-radius: 12px;" text="Login">
+            <Button fx:id="loginBtn" defaultButton="true" minWidth="280.0" mnemonicParsing="false" onAction="#login_Action" prefWidth="280.0" style="-fx-background-color: e96645; -fx-background-radius: 12px;">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
@@ -46,7 +46,7 @@
       </ImageView>
    </center>
    <top>
-      <Label fx:id="Login_ErrorMsg" text="Error Message" textFill="#e96645" BorderPane.alignment="CENTER">
+      <Label fx:id="Login_ErrorMsg" text="*Blank*" textFill="#e96645" BorderPane.alignment="CENTER">
          <font>
             <Font size="20.0" />
          </font>
