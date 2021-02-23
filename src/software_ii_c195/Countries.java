@@ -9,39 +9,51 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- *
+ * The Countries class contains country id and name
  * @author Admin
  */
 public class Countries {
     
-    //List object used to refrence all countrys
+    /**
+     * List object used to refrence all countrys
+     */
     public static ObservableList<Countries> countryList = FXCollections.observableArrayList();
     
     private final int countryID;
     private final String countryName;
     
-    public Countries( int id, String name ) {
+    public Countries(int id, String name) {
         this.countryID = id;
         this.countryName = name;
     }
     
-    //return a country object based on the Id passed
-    public static Countries findCountryById( int id ) {
+    /**
+     * return a country object based on the Id passed
+     * @param id the id of the country you want to return
+     * @return the country of the id entered
+     */
+    public static Countries findCountryById(int id) {
         int i = 0;
-        while ( i < countryList.size() ) {
-            if ( id == countryList.get( i ).countryID )
-                return countryList.get( i );
+        while (i < countryList.size()) {
+            if (id == countryList.get(i).countryID)
+                return countryList.get(i);
             i++;
         }
         return null;
     }
     
-    //return country ID
+    /**
+     * return country ID
+     * @return the country id
+     */
     public int getCountryID() {
         return this.countryID;
     }
     
-    //return country name
+    /**
+     * return country name
+     * @return the country name
+     */
     public String getCountryName() {
         return this.countryName;
     }

@@ -11,50 +11,67 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- *
- * @author Admin
+ * Contacts contains name, email, ID of contacts
+ * @author Jaxon
  */
 public class Contacts {
     
-        //List object made to contain all contacts
+        /**
+         * List object made to contain all contacts
+         */
         public static ObservableList<Contacts> contactList = FXCollections.observableArrayList();
         
         private final SimpleIntegerProperty contactID;
         private final SimpleStringProperty contactName;
         private final SimpleStringProperty contactEmail;
         
-        public Contacts( int id, String name, String email ) {
-            this.contactID = new SimpleIntegerProperty( id );
-            this.contactName = new SimpleStringProperty( name );
-            this.contactEmail = new SimpleStringProperty( email );
+        public Contacts(int id, String name, String email) {
+            this.contactID = new SimpleIntegerProperty(id);
+            this.contactName = new SimpleStringProperty(name);
+            this.contactEmail = new SimpleStringProperty(email);
         }
         
-        //get contact ID
+        /**
+         * get contact ID
+         * @return int Contact ID Number
+         */
         public int getID() {
             return this.contactID.get();
         }
         
-        //get contact name
+        /**
+         * get contact name
+         * @return String Contact name
+         */
         public String getName() {
             return this.contactName.get();
         }
         
-        //get contact email
+        /**
+         * get contact email
+         * @return String Contact email
+         */
         public String getEmail() {
             return this.contactEmail.get();
         }
         
-        //find contact by Id 
-        public static Contacts findContactByID( int id ) {
+        /**
+         * find contact by Id pass the int id and get the Contact
+         * @param id int ID number of the contact to return
+         * @return Contacts the contact of the id
+         */
+        public static Contacts findContactByID(int id) {
             int i = 0;
-            while( i < contactList.size() ) {
-                if( id == contactList.get(i).getID() ) return contactList.get( i );
+            while(i < contactList.size()) {
+                if(id == contactList.get(i).getID()) return contactList.get(i);
                 i++;
             }
             return null;
         }
         
-        //convert contact object to string just the name for the table
+        /**
+         * convert contact object to string just the name for the table
+         */
         @Override
         public String toString() {
             return this.getName();

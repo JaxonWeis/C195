@@ -11,11 +11,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- *
+ * Customer contains customers information like ID, name, address, postal code, phone, and division
  * @author Admin
  */
 public class Customers {
     
+    /**
+     * CustomerList is the major variable that contains all of the customers
+     */
     public static ObservableList<Customers> customerList = FXCollections.observableArrayList();
     
     private final SimpleIntegerProperty ID;
@@ -25,56 +28,80 @@ public class Customers {
     private final SimpleStringProperty phone;
     private final Divisions division;
     
-    public Customers( int id, String name, String add, String post, String phone, Divisions div ) {
-        this.ID = new SimpleIntegerProperty( id );
-        this.name = new SimpleStringProperty( name );
-        this.address = new SimpleStringProperty( add );
-        this.postalCode = new SimpleStringProperty( post );
-        this.phone = new SimpleStringProperty( phone );
+    public Customers(int id, String name, String add, String post, String phone, Divisions div) {
+        this.ID = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.address = new SimpleStringProperty(add);
+        this.postalCode = new SimpleStringProperty(post);
+        this.phone = new SimpleStringProperty(phone);
         this.division = div;
     }
     
-    //get customer id
+    /**
+     * get customer id
+     * @return the customer ID
+     */
     public int getID() {
         return this.ID.get();
     }
     
-    //get customer Name
+    /**
+     * get customer Name
+     * @return the customer name
+     */
     public String getName() {
         return this.name.get();
     }
     
-    //get customer address
+    /**
+     * get customer address
+     * @return the customer address
+     */
     public String getAddress() {
         return this.address.get();
     }
     
-    //get customer postal code
+    /**
+     * get customer postal code
+     * @return the customer postal code
+     */
     public String getPostalCode() {
         return this.postalCode.get();
     }
     
-    //get customer phone
+    /**
+     * get customer phone
+     * @return the customer phone
+     */
     public String getPhone() {
         return this.phone.get();
     }
     
-    //get customer division
+    /**
+     * get customer division
+     * @return the customer division
+     */
     public Divisions getDivision() {
         return this.division;
     }
     
-    //convert cutomer object to string by returning customer name
+    /**
+     * convert customer object to string by returning customer name
+     */
     @Override
     public String toString() {
         return this.getName();
     }
     
-    //return customer object by entering its ID number
-    public static Customers getCustomerByID( int ID ) {
+    /**
+     * return customer object by entering its ID number
+     * @param ID the id of the customer you want returned
+     * @return the customer with the matching id number
+     */
+    public static Customers getCustomerByID(int ID) {
         int i = 0;
-        while( i < customerList.size() ) {
-            if( ID == customerList.get(i).getID() ) return customerList.get( i );
+        while(i < customerList.size()) {
+            if(ID == customerList.get(i).getID()) return customerList.get(i);
             i++;
         }
         return null;

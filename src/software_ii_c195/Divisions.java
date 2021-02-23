@@ -9,12 +9,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- *
+ * Division class contains the ID, name, and country of each division
  * @author Admin
  */
 public class Divisions{
     
-    //Object where all divisions are held
+    /**
+     * The major variable where all divisions are stored
+     */
     public static ObservableList<Divisions> divisionList = FXCollections.observableArrayList();
     
     //Variables that are part of each object
@@ -23,52 +25,71 @@ public class Divisions{
     private final Countries country;
     
     //Contructor
-    public Divisions ( int ID, String name, Countries country ) {
+    public Divisions (int ID, String name, Countries country) {
         this.ID = ID;
         this.name = name;
         this.country = country;
     }
     
-    //Return division object when passing corrisponding id
-    public static Divisions findDivisionByID( int ID ) {
+    /**
+     * Return division object when passing corrisponding id
+     * @param ID the id of the division you want returned
+     * @return the division with matching ID
+     */
+    public static Divisions findDivisionByID(int ID) {
         int i = 0;
-        while ( i < divisionList.size() ) {
-            if ( ID == divisionList.get( i ).getID() )
-                return divisionList.get( i );
+        while (i < divisionList.size()) {
+            if (ID == divisionList.get(i).getID())
+                return divisionList.get(i);
             i++;
         }
         return null;
     }
     
-    //get ID of division object
+    /**
+     * get ID of division object
+     * @return the ID of the division
+     */
     public int getID() {
         return this.ID;
     }
     
-    //get Name of division object
+    /**
+     * get Name of division object
+     * @return the name of the division
+     */
     public String getName() {
         return this.name;
     }
     
-    //return country object of division object
+    /**
+     * return country object of division object
+     * @return the country of the division
+     */
     public Countries getCountry() {
         return this.country;
     }
     
-    //override string of object by returning name
+    /**
+     * override string of object by returning name
+     */
     @Override
     public String toString() {
         return this.name;
     }
     
-    //return list of divisions  of certain country
-    public static ObservableList<Divisions> getDivisionByCountry( Countries country ) {
+    /**
+     * return list of divisions  of certain country
+     * @param country the country to filter divisions with 
+     * @return the filtered list of divisions
+     */
+    public static ObservableList<Divisions> getDivisionByCountry(Countries country) {
         ObservableList<Divisions> temp = FXCollections.observableArrayList();
         
         int i = 0;
-        while ( i < divisionList.size() ) {
-            if ( country == divisionList.get( i ).getCountry() )
-                temp.add( divisionList.get( i ) );
+        while (i < divisionList.size()) {
+            if (country == divisionList.get(i).getCountry())
+                temp.add(divisionList.get(i));
             i++;
         }
         return temp;

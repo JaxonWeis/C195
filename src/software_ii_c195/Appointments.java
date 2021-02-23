@@ -15,11 +15,15 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- *
+ * The Appointments class is the used for appointments
+ * @see  appointmentList
  * @author Admin
  */
 public class Appointments {
     
+    /**
+     * This is the major variable that contains all appointment objects
+     */
     public static ObservableList<Appointments> appointmentList = FXCollections.observableArrayList();
     
     private final SimpleIntegerProperty apointmentID;
@@ -33,84 +37,123 @@ public class Appointments {
     private final Customers customer;
     
     //Contructor
-    public Appointments( int ID, String Title, String Description, String Location, Contacts Contact, String Type, String Start, String End, Customers Customer ) {
-        this.apointmentID = new SimpleIntegerProperty( ID );
-        this.title = new SimpleStringProperty( Title );
-        this.description = new SimpleStringProperty( Description );
-        this.location = new SimpleStringProperty( Location );
+    public Appointments(int ID, String Title, String Description, String Location, Contacts Contact, String Type, String Start, String End, Customers Customer) {
+        this.apointmentID = new SimpleIntegerProperty(ID);
+        this.title = new SimpleStringProperty(Title);
+        this.description = new SimpleStringProperty(Description);
+        this.location = new SimpleStringProperty(Location);
         this.contact = Contact;
-        this.type = new SimpleStringProperty( Type );
-        this.startTime = ZonedDateTime.of( LocalDateTime.parse( Start, DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), ZoneId.of( "UTC+0" ) );
-        this.endTime = ZonedDateTime.of( LocalDateTime.parse( End, DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ), ZoneId.of( "UTC+0" ) );
+        this.type = new SimpleStringProperty(Type);
+        this.startTime = ZonedDateTime.of(LocalDateTime.parse(Start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), ZoneId.of("UTC+0"));
+        this.endTime = ZonedDateTime.of(LocalDateTime.parse(End, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), ZoneId.of("UTC+0"));
         this.customer = Customer;
     }
     
-    //Gets appointment ID
+    /**
+     * Gets appointment ID
+     * @return int the ID number
+     */
     public int getApointmentID() {
         return this.apointmentID.get();
     }
     
-    //Gets appointment title
+    /**
+     * Gets appointment title
+     * @return String the appointment title
+     */
     public String getTitle() {
         return this.title.get();
     }
     
-    //Get Appointment Description
+    /** 
+     * Get Appointment Description
+     * @return String the appointment description
+     */
     public String getDescription() {
         return this.description.get();
     }
     
-    //get Appointment Location
+    /** 
+     * get Appointment Location
+     * @return String the appointment location
+     */
     public String getLocation() {
         return this.location.get();
     }
     
-    //get appointment type
+    /** 
+     * get appointment type
+     * @return String Appointment Type
+     */
     public String getType() {
         return this.type.get();
     }
     
-    //get appointment contact
+    /**
+     * get appointment contact
+     * @return Contacts the appointment contact
+     */
     public Contacts getContact() {
         return this.contact;
     }
     
-    //get appointment customer
+    /**
+     * get appointment customer
+     * @return Customers the appointment customer
+     */
     public Customers getCustomer() {
         return this.customer;
     }
     
-    //get appointment start time in local time zone
+    /**
+     * get appointment start time in local time zone
+     * @return the appointment start time
+     */
     public String getStartTime() {
-        ZonedDateTime localTime = this.startTime.withZoneSameInstant( ZoneId.systemDefault() );
-        return localTime.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm" ) );
+        ZonedDateTime localTime = this.startTime.withZoneSameInstant(ZoneId.systemDefault());
+        return localTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
     
-    //get appointment start time as a ZonedDateTime object
+    /**
+     * get appointment start time as a ZonedDateTime object
+     * @return the appointment start time local zone
+     */
     public ZonedDateTime getStartTimeObj() {
         return this.startTime;
     }
     
-    //get appointment start time in UTC time zone
+    /**
+     * get appointment start time in UTC time zone
+     * @return the appointment start time in UTC
+     */
     public String getStartTimeUTC() {
         ZonedDateTime localTime = this.startTime;
-        return localTime.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) );
+        return localTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
     
-    //get appointment end time in local time zone
+    /**
+     * get appointment end time in local time zone
+     * @return the appointment end time 
+     */
     public String getEndTime() {
-        ZonedDateTime localTime = this.endTime.withZoneSameInstant( ZoneId.systemDefault() );
-        return localTime.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm" ) );
+        ZonedDateTime localTime = this.endTime.withZoneSameInstant(ZoneId.systemDefault());
+        return localTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
     
-    //get appointment end time as a Zoned Date time Obect
+    /**
+     * get appointment end time as a Zoned Date time Object
+     * @return the appointment end time
+     */
     public ZonedDateTime getEndTimeObj() {
         return this.endTime;
     }
     
-    //get appointment end time in UTC time zone
+    /**
+     * get appointment end time in UTC time zone
+     * @return the appointment end time in UTC
+     */
     public String getEndTimeUTC() {
         ZonedDateTime localTime = this.endTime;
-        return localTime.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) );
+        return localTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }

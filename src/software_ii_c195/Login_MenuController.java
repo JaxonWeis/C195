@@ -48,43 +48,45 @@ public class Login_MenuController implements Initializable {
     private Button loginBtn;
     
     Locale locale = Locale.getDefault();
-    ResourceBundle rbLang = ResourceBundle.getBundle("Language.lang", locale );
+    ResourceBundle rbLang = ResourceBundle.getBundle("Language.lang", locale);
     
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize( URL url, ResourceBundle rb ) {
-        Platform.runLater( () -> root.requestFocus() );
+    public void initialize(URL url, ResourceBundle rb) {
+        Platform.runLater(() -> root.requestFocus());
         
         //set menu language items
-        Login_Email.setPromptText( rbLang.getString( "Email" ) );
-        Login_Password.setPromptText( rbLang.getString( "Password" ) );
-        loginBtn.setText( rbLang.getString( "Login" ) );
-        
-        
+        Login_Email.setPromptText(rbLang.getString("Email"));
+        Login_Password.setPromptText(rbLang.getString("Password"));
+        loginBtn.setText(rbLang.getString("Login"));
         
         //Clear error message
-        Login_ErrorMsg.setText( "" );
+        Login_ErrorMsg.setText("");
         
         //Show country name and zone Id
         String Country_Name = locale.getDisplayCountry();
-        String Zone_ID = ZoneId.systemDefault().getDisplayName( TextStyle.FULL, locale );
-        Login_ZoneID.setText( Country_Name + " - " + Zone_ID );
+        String Zone_ID = ZoneId.systemDefault().getDisplayName(TextStyle.FULL, locale);
+        Login_ZoneID.setText(Country_Name + " - " + Zone_ID);
         
         try {
             //Try to setup the database
             mysql.database = new mysql();
         }
-        catch( SQLException e ) {
-            System.out.println( "Database Setup Failed!!! " + e );
+        catch(SQLException e) {
+            System.out.println("Database Setup Failed!!! " + e);
         }
+        
+        //Create log file if one hasn't been made
+        Log.createLog();
+        
     }    
 
     //Run this function when login button hit
     @FXML
-    private void login_Action( ActionEvent event ) {
-        System.out.println( "Login Button hit..." );
+    private void login_Action(ActionEvent event) {
+        System.out.println("Login Button hit...");
         
         //Clear error message
         Login_ErrorMsg.setText("");
@@ -96,33 +98,36 @@ public class Login_MenuController implements Initializable {
         
         //Check database for matching username and password
         try {
-            verifyUser = mysql.database.verifyUser( User, Pass );
+            verifyUser = mysql.database.verifyUser(User, Pass);
         }
-        catch( SQLException e )
+        catch(SQLException e)
         {
-            System.out.println( "Database Failed!!! " + e );
+            System.out.println("Database Failed!!! " + e);
         }
         
-        if( verifyUser ) {
-            System.out.println( "Login Sucessful!" );
+        if(verifyUser) {
+            System.out.println("Login Successful!");
             try {
-                Parent root = FXMLLoader.load( getClass().getResource( "Main_Menu.fxml" ) );
-                Scene scene = new Scene( root );
+                Log.write(User + " Login Successful.");
+                
+                Parent root = FXMLLoader.load(getClass().getResource("Main_Menu.fxml"));
+                Scene scene = new Scene(root);
                 Stage stage = new Stage();
-                stage.setTitle( "CalenDo - Main" );
-                stage.setScene( scene );
+                stage.setTitle("CalenDo - Main");
+                stage.setScene(scene);
                 stage.show();
                 
-                ( ( Node )( event.getSource() ) ).getScene().getWindow().hide();
+                ((Node)(event.getSource())).getScene().getWindow().hide();
             }
-            catch( IOException e ) {
-                System.out.println( "Error!!! " + e );
+            catch(IOException e) {
+                System.out.println("Error!!! " + e);
             }
         }
         else
         {
-            System.out.println( "Login Error!!!" );
-            Login_ErrorMsg.setText( rbLang.getString("FailedLogin") );
+            Log.write(User + " Login Failed.");
+            System.out.println("Login Error!!!");
+            Login_ErrorMsg.setText(rbLang.getString("FailedLogin"));
         }
     }   
 }

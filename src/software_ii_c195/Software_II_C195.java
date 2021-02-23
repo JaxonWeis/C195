@@ -19,18 +19,18 @@ public class Software_II_C195 extends Application {
     
     
     @Override
-    public void start( Stage stage ) throws Exception {
-        Parent root = FXMLLoader.load( getClass().getResource( "Login_Menu.fxml" ) );
-        Scene scene = new Scene( root );
-        stage.setTitle( "CalenDo - Login" );
-        stage.setScene( scene );
+    public void start(Stage stage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("Login_Menu.fxml"));
+        Scene scene = new Scene(root);
+        stage.setTitle("CalenDo - Login");
+        stage.setScene(scene);
         stage.show();
     }
 
     /**
      * @param args the command line arguments
      */
-    public static void main( String[] args ) {
-        launch( args );
+    public static void main(String[] args) {
+        launch(args);
     }   
 }

@@ -25,6 +25,8 @@ import javafx.stage.Stage;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import javafx.scene.control.Button;
+import javax.swing.JOptionPane;
 
 /**
  * FXML Controller class
@@ -75,7 +77,25 @@ public class Main_MenuController implements Initializable {
     private RadioButton monthRadio;
     @FXML
     private Label viewLabel;
-
+    @FXML
+    private Label NextAppointment;
+    @FXML
+    private Button AppointmentAddButton;
+    @FXML
+    private Button AppointmentUpdateButton;
+    @FXML
+    private Button AppointmentDeleteButton;
+    @FXML
+    private Button leftButton;
+    @FXML
+    private Button rightButton;
+    @FXML
+    private Button customerAddButton;
+    @FXML
+    private Button customerUpdateButton;
+    @FXML
+    private Button customerDeleteButton;
+    
     public static ZonedDateTime startView;
     public static ZonedDateTime endView;
 
@@ -99,10 +119,22 @@ public class Main_MenuController implements Initializable {
             System.out.println( "Done!\nUpdating Appointment List..." );
             mysql.database.updateAppointmentList();// Requires Contacts and Customers
             System.out.println( "Done!" );
+            
+            System.out.println("Checking for appointments within 15 minutes... ");
+            startView = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
+            //startView.minusDays(0);
+            endView = startView.plusMinutes(15);
+            String begin = startView.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) );
+            String end = endView.format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) );
+            mysql.database.updateAppointmentListByStart(begin, end);
+            System.out.println("Done! Found " + Appointments.appointmentList.size() + " Appointments");
         }
         catch( SQLException e ) {
             System.out.println( "SQL ERROR!!! " + e );
         }
+        
+        if(Appointments.appointmentList.size() > 0) NextAppointment.setText("Id: "+ Appointments.appointmentList.get(0).getApointmentID() + " Appointment: " + Appointments.appointmentList.get(0).getTitle() + " Starts at: " + Appointments.appointmentList.get(0).getStartTime());
+        else NextAppointment.setText("There are no appointments soon.");
         
         //Setup table and columns for customer list
         Cus_ID.setCellValueFactory( new PropertyValueFactory<>( "ID" ) );
@@ -173,7 +205,10 @@ public class Main_MenuController implements Initializable {
     @FXML
     private void customerDelete( ActionEvent event ) {
         Customers selected = Customer_Table.getSelectionModel().getSelectedItem();
+        
         if( selected == null ) return;
+        if ( !ConfirmCustomerDelete(selected) ) return;
+        
         try {
             mysql.database.deleteCustomer( selected );
         }
@@ -226,8 +261,10 @@ public class Main_MenuController implements Initializable {
     @FXML
     private void appointmentDelete( ActionEvent event ) {
         Appointments selected = Appointment_Table.getSelectionModel().getSelectedItem();
-        if( selected == null ) return;
         
+        if( selected == null ) return;
+        if( !ConfirmAppointmentDelete( selected ) ) return;
+            
         try {
             mysql.database.deleteAppointment( selected );
         }
@@ -260,7 +297,7 @@ public class Main_MenuController implements Initializable {
         String end = endView.format( DateTimeFormatter.ISO_LOCAL_DATE );        
         viewLabel.setText( begin + " :: " + end );
         
-        begin = startView.withZoneSameInstant( ZoneId.of( "UTC+0" ) ).format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) );
+        begin = startView.withZoneSameInstant( ZoneId.of( "UTC+0" ) ).format( DateTimeFormatter.ISO_LOCAL_DATE );
         end = endView.withZoneSameInstant( ZoneId.of( "UTC+0" ) ).format( DateTimeFormatter.ISO_LOCAL_DATE );
         
         try {
@@ -299,5 +336,17 @@ public class Main_MenuController implements Initializable {
             endView = startView.plusMonths( 1 );
         }
         updateView();
+    }
+
+    private boolean ConfirmCustomerDelete( Customers selected ) {
+        int i = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + selected.getName() + "?", "Delete Customer?", JOptionPane.YES_NO_OPTION);
+        
+        return i == 0;
+    }
+    
+    private boolean ConfirmAppointmentDelete( Appointments selected ){
+        int i = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + selected.getApointmentID() + ": " + selected.getType() + "?", "Delete Appointment?", JOptionPane.YES_NO_OPTION);
+        
+        return i == 0;
     }
 }
