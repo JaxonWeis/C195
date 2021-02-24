@@ -349,4 +349,19 @@ public class Main_MenuController implements Initializable {
         
         return i == 0;
     }
+
+    @FXML
+    private void RunReport1(ActionEvent event) {
+        new Reports().Report(1);
+    }
+
+    @FXML
+    private void RunReport2(ActionEvent event) {
+        new Reports().Report(2);
+    }
+
+    @FXML
+    private void RunReport3(ActionEvent event) {
+        new Reports().Report(3);
+    }
 }

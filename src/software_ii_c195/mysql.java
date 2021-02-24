@@ -5,9 +5,11 @@
  */
 package software_ii_c195;
 
+import java.io.IOException;
 import java.sql.*;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 /**
  * this class is used to interact with the database
@@ -459,5 +461,87 @@ public class mysql {
         String begin = Main_MenuController.startView.withZoneSameInstant(ZoneId.of("UTC+0")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String end = Main_MenuController.endView.withZoneSameInstant(ZoneId.of("UTC+0")).format(DateTimeFormatter.ISO_LOCAL_DATE);
         updateAppointmentList(begin, end);
+    }
+    
+    /**
+     * Report1 runs the first report gets the result from the Database
+     * @return the report from the database
+     * @throws SQLException if database doesnt connect 
+     */
+    public String report1() throws SQLException{
+        //Setting up SQL query with variables added in        
+        System.out.print("Making Sql Statement... ");
+        String sql = "SELECT COUNT(Appointment_ID) AS \"Count\", `Type` , MONTH(`Start`) AS \"Month\", YEAR(`Start`) AS \"Year\" FROM appointments a GROUP BY Year, Month, `Type`;";
+        PreparedStatement ps = this.conn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        
+        String report = "";
+        while(rs.next()){
+            report += "Count: " + rs.getString(1) + ",\t\tType: " + rs.getString(2) + ",\t\tMonth: " + rs.getString(3) + ",\t\tYear: " + rs.getString(4) + "\n";
+        }
+        
+        return report;
+    }
+    
+    /**
+     * Report2 runs the second report gets the result from the Database
+     * @return the report from the database
+     * @throws SQLException if the database doesnt connect
+     */
+    public String report2() throws SQLException{
+        //Setting up SQL query with variables added in        
+        System.out.print("Making Sql Statement... ");
+        String sql = "SELECT Contact_Name, Appointment_ID, Title, `Type`, Description, `Start`, `End`, Customer_ID \n" +
+                    "FROM appointments\n" +
+                    "INNER JOIN contacts USING (Contact_ID)\n" +
+                    "WHERE Start BETWEEN ? AND ?" +
+                    "ORDER BY Contact_Name, Start";
+        PreparedStatement ps = this.conn.prepareStatement(sql);
+        String today = ZonedDateTime.now(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String tomorrow = ZonedDateTime.now(ZoneId.systemDefault()).plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        ps.setString(1, today);
+        ps.setString(2, tomorrow);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        String report = "";
+        while(rs.next()){
+            report += "Contact Name: " + rs.getString(1) + ",\t\tAppointment ID: " + rs.getString(2) + ",\t\tTitle: " + rs.getString(3) + ",\t\tType: " + rs.getString(4) + ",\t\tDescription: " + rs.getString(5) + ",\t\tStart: " + rs.getString(6) + ",\t\tEnd: " + rs.getString(7) + ",\t\tCustomer ID: " + rs.getString(8) + "\n";
+        }
+        
+        if(report.isEmpty()) report = "No appointments today.";
+        
+        return report;
+    }
+    
+    /**
+     * Report3 runs the third report gets the result from the Database
+     * @return the report from the database
+     * @throws SQLException if the database doesnt connect
+     */
+    public String report3() throws SQLException{
+        //Setting up SQL query with variables added in        
+        System.out.print("Making Sql Statement... ");
+        String sql = "SELECT Customer_Name, Appointment_ID, Title, `Type`, Description, `Start`, `End`\n" +
+                        "FROM appointments\n" +
+                        "INNER JOIN customers USING (Customer_ID)\n" +
+                        "WHERE Start BETWEEN ? AND ?\n" +
+                        "ORDER BY Customer_Name, Start";
+        PreparedStatement ps = this.conn.prepareStatement(sql);
+        String year = ZonedDateTime.now(ZoneId.systemDefault()).withDayOfYear(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String nextYear = ZonedDateTime.now(ZoneId.systemDefault()).withDayOfYear(1).plusYears(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        ps.setString(1, year);
+        ps.setString(2, nextYear);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        String report = "";
+        while(rs.next()){
+            report += "Customer Name: " + rs.getString(1) + ",\t\tAppointment ID: " + rs.getString(2) + ",\t\tTitle: " + rs.getString(3) + ",\t\tType: " + rs.getString(4) + ",\t\tDescription: " + rs.getString(5) + ",\t\tStart: " + rs.getString(6) + ",\t\tEnd: " + rs.getString(7) + "\n";
+        }
+        
+        if(report.isEmpty()) report = "No appointments this year";
+        
+        return report;
     }
 }

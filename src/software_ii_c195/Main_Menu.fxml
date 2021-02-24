@@ -114,9 +114,9 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Reports">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Customer Appointments by Type and Month" />
-                        <MenuItem mnemonicParsing="false" text="Schedule by Contact" />
-                        <MenuItem mnemonicParsing="false" text="Customer Appointments for the Year" />
+                    <MenuItem mnemonicParsing="false" onAction="#RunReport1" text="Customer Appointments by Type and Month" />
+                        <MenuItem mnemonicParsing="false" onAction="#RunReport2" text="Schedule by Contact" />
+                        <MenuItem mnemonicParsing="false" onAction="#RunReport3" text="Customer Appointments for the Year" />
                   </items>
                 </Menu>
               </menus>
