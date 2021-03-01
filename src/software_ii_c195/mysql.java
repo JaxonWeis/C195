@@ -23,7 +23,7 @@ public class mysql {
     
     //Editable Database data
     private final String DBUser = "U05XJp";
-    private final String DBPassword = "53688633129";
+    private final String DBPassword = "";
     private final String DBUrl = "wgudb.ucertify.com";
     private final String DBPort = "3306";
     private final String DBName = "WJ05XJp";
