@@ -37,6 +37,19 @@ public class Appointments {
     private final Customers customer;
     
     //Contructor
+
+    /**
+     *
+     * @param ID
+     * @param Title
+     * @param Description
+     * @param Location
+     * @param Contact
+     * @param Type
+     * @param Start
+     * @param End
+     * @param Customer
+     */
     public Appointments(int ID, String Title, String Description, String Location, Contacts Contact, String Type, String Start, String End, Customers Customer) {
         this.apointmentID = new SimpleIntegerProperty(ID);
         this.title = new SimpleStringProperty(Title);

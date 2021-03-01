@@ -22,8 +22,9 @@ import java.time.format.DateTimeFormatter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javax.swing.JOptionPane;
 import java.time.DayOfWeek;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 /**
  * FXML Controller class
@@ -58,11 +59,20 @@ public class Appointment_MenuController implements Initializable {
     private ComboBox<Integer> AppEndMin;
     @FXML
     private ComboBox<Customers> AppCustomer;
+    @FXML
+    private Label ErrorMsg;
+    @FXML
+    private Button SubmitButton;
+    @FXML
+    private Button CancelButton;
     
     private boolean update = false;
 
+
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -88,9 +98,15 @@ public class Appointment_MenuController implements Initializable {
         //fill min combo boxes with min list
         AppStartMin.setItems(min);
         AppEndMin.setItems(min);
+        
+        //Clear the error at top of screen
+        ClearError(new ActionEvent());
     }
 
-    //This function fills in the form from the passed variable and sets update to true
+    /**
+     * This function fills in the form from the passed variable and sets update to true
+     * @param app the appointment to prefill into the form
+     */
     public void prefill (Appointments app) {                                         //PreFill all Customer info
         update = true;
         
@@ -145,20 +161,19 @@ public class Appointment_MenuController implements Initializable {
         ZonedDateTime end = ZonedDateTime.of(endDate, endTime, ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC+0"));
         
         Customers customer = AppCustomer.getValue();
+        Appointments app = new Appointments(ID, title, des, Loc, contact, type, begin.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), customer);
         
-        if(!isBussinessHours(begin, end)){
-            JOptionPane.showMessageDialog(null, "Selected Times are outside businness hours", "Time Error", JOptionPane.ERROR_MESSAGE);
-            //return;
+        if(!isBussinessHours(app)){
+            ErrorMsg.setText("Selected Times are outside businness hours");
+            return;
         }
         
-        if(!isOverlapping(begin, end)){
-            JOptionPane.showMessageDialog(null, "Selected Times are overlapping another appointment", "Time Error", JOptionPane.ERROR_MESSAGE);
-            //return;
+        if(isOverlapping(app)){
+            ErrorMsg.setText("Selected Times are overlapping another appointment");
+            return;
         }
-        
         
         try {
-            Appointments app = new Appointments(ID, title, des, Loc, contact, type, begin.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), customer);
             if(update) mysql.database.updateAppointment(app);
             else mysql.database.addAppointment(app);
         
@@ -175,9 +190,9 @@ public class Appointment_MenuController implements Initializable {
         ((Node)(event.getSource())).getScene().getWindow().hide();
     }
     
-    private boolean isBussinessHours(ZonedDateTime start, ZonedDateTime end){
-        start = start.withZoneSameInstant(ZoneId.of("America/New_York"));
-        end = end.withZoneSameInstant(ZoneId.of("America/New_York"));
+    private boolean isBussinessHours(Appointments app){
+        ZonedDateTime start = app.getStartTimeObj().withZoneSameInstant(ZoneId.of("America/New_York"));
+        ZonedDateTime end = app.getEndTimeObj().withZoneSameInstant(ZoneId.of("America/New_York"));
         
         ZonedDateTime startLimit1 = ZonedDateTime.of(start.toLocalDate(), LocalTime.of(7, 59), ZoneId.of("America/New_York"));
         ZonedDateTime stopLimit1 = ZonedDateTime.of(start.toLocalDate(), LocalTime.of(22, 1), ZoneId.of("America/New_York"));
@@ -191,18 +206,53 @@ public class Appointment_MenuController implements Initializable {
         return startLimit1.isBefore(start) && stopLimit1.isAfter(start) && startLimit2.isBefore(end) && stopLimit2.isAfter(end);
     }
     
-    private boolean isOverlapping(ZonedDateTime start, ZonedDateTime end){
-        String startStr = start.withZoneSameInstant(ZoneId.of("UTC+0")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        String endStr = end.withZoneSameInstant(ZoneId.of("UTC+0")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        int i = 0;
-        try {
-            i = mysql.database.getAppointmentNum(startStr, endStr);
+    boolean overlapCheck = false;
+
+    /**
+     * Check if the new appointment will overlap existing appointments 
+     * @param start Start time of new appointment
+     * @param end End time of new appointments
+     * @return true if overlapping false if appointment is clear
+     */
+    private boolean isOverlapping(Appointments app){
+        ZonedDateTime start = app.getStartTimeObj();
+        ZonedDateTime end = app.getEndTimeObj();
+        System.out.println("Starting OverLap check");
+        overlapCheck = false;
+        String startDate = start.withZoneSameInstant(ZoneId.of("Z")).withHour(0).withMinute(0).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss" ));
+        String endDate = end.withZoneSameInstant(ZoneId.of("Z")).withHour(23).withMinute(59).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss" ));
+        ObservableList<Appointments> List = FXCollections.observableArrayList();
+        
+        try{
+            List = mysql.database.getAppointmentList(startDate, endDate);
         }
         catch(SQLException e){
-            System.out.println("SQL Error!!! " + e);
+            System.out.println("Database Error!!! " + e);
         }
         
-        if(update) i--;
-        return i == 0;
+        List.forEach(appList -> {
+            if(appList.getApointmentID() != app.getApointmentID() ){
+                if(appList.getStartTimeObj().isBefore(start)){
+                    if(appList.getEndTimeObj().isAfter(start)){
+                        overlapCheck = true;
+                        System.out.println("OverLap Check Failed!!!");
+                    }
+                }
+                else{
+                    if(end.isAfter(appList.getStartTimeObj())){
+                        overlapCheck = true;
+                        System.out.println("OverLap Check Failed!!!");
+                    }
+                }
+            }
+        });
+        
+        System.out.println("Overlap check done " + overlapCheck);
+        return overlapCheck;
+    }
+
+    @FXML
+    private void ClearError(ActionEvent event) {
+        ErrorMsg.setText("");
     }
 }

@@ -23,12 +23,18 @@ public class Report_MenuController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
     
+    /**
+     *
+     * @param str
+     */
     public void prefill(String str){
         textArea.setText(str);   
     }

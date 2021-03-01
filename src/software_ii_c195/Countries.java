@@ -22,6 +22,11 @@ public class Countries {
     private final int countryID;
     private final String countryName;
     
+    /**
+     *
+     * @param id
+     * @param name
+     */
     public Countries(int id, String name) {
         this.countryID = id;
         this.countryName = name;

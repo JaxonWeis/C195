@@ -18,6 +18,9 @@ import javafx.stage.Stage;
  */
 public class Reports {
     
+    /**
+     *
+     */
     public Reports(){
         
     }

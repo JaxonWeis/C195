@@ -25,6 +25,13 @@ public class Divisions{
     private final Countries country;
     
     //Contructor
+
+    /**
+     *
+     * @param ID
+     * @param name
+     * @param country
+     */
     public Divisions (int ID, String name, Countries country) {
         this.ID = ID;
         this.name = name;

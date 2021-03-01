@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="software_ii_c195.Appointment_MenuController">
    <center>
@@ -73,7 +74,7 @@
             <AnchorPane prefWidth="200.0">
                <children>
                   <Label layoutX="14.0" layoutY="90.0" text="Start Date:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="5.0" />
-                  <DatePicker fx:id="AppStartDate" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <DatePicker fx:id="AppStartDate" onAction="#ClearError" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
                <padding>
                   <Insets left="10.0" right="10.0" top="10.0" />
@@ -89,13 +90,13 @@
                               <Insets right="5.0" />
                            </padding>
                         </Label>
-                        <ComboBox fx:id="AppStartHr" prefWidth="75.0" />
+                        <ComboBox fx:id="AppStartHr" onAction="#ClearError" prefWidth="75.0" />
                         <Label text="Min:">
                            <padding>
                               <Insets left="30.0" right="5.0" />
                            </padding>
                         </Label>
-                        <ComboBox fx:id="AppStartMin" prefWidth="80.0" />
+                        <ComboBox fx:id="AppStartMin" onAction="#ClearError" prefWidth="80.0" />
                      </children>
                   </HBox>
                </children>
@@ -106,7 +107,7 @@
             <AnchorPane prefWidth="200.0">
                <children>
                   <Label layoutX="14.0" layoutY="90.0" text="End Date:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="5.0" />
-                  <DatePicker fx:id="AppEndDate" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <DatePicker fx:id="AppEndDate" onAction="#ClearError" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
                <padding>
                   <Insets left="10.0" right="10.0" top="10.0" />
@@ -122,13 +123,13 @@
                               <Insets right="5.0" />
                            </padding>
                         </Label>
-                        <ComboBox fx:id="AppEndHr" prefWidth="75.0" />
+                        <ComboBox fx:id="AppEndHr" onAction="#ClearError" prefWidth="75.0" />
                         <Label text="Min:">
                            <padding>
                               <Insets left="30.0" right="5.0" />
                            </padding>
                         </Label>
-                        <ComboBox fx:id="AppEndMin" prefWidth="80.0" />
+                        <ComboBox fx:id="AppEndMin" onAction="#ClearError" prefWidth="80.0" />
                      </children>
                   </HBox>
                </children>
@@ -160,4 +161,15 @@
          </children>
       </AnchorPane>
    </bottom>
+   <top>
+      <HBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="ErrorMsg" text="BLANK" textAlignment="CENTER" textFill="RED">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </top>
 </BorderPane>

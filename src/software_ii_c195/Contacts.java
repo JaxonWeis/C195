@@ -25,7 +25,13 @@ public class Contacts {
         private final SimpleStringProperty contactName;
         private final SimpleStringProperty contactEmail;
         
-        public Contacts(int id, String name, String email) {
+    /**
+     *
+     * @param id
+     * @param name
+     * @param email
+     */
+    public Contacts(int id, String name, String email) {
             this.contactID = new SimpleIntegerProperty(id);
             this.contactName = new SimpleStringProperty(name);
             this.contactEmail = new SimpleStringProperty(email);

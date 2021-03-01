@@ -41,6 +41,8 @@ public class Customer_MenuController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -49,6 +51,11 @@ public class Customer_MenuController implements Initializable {
     }
 
     //This function is used to prefill the form and set it to update
+
+    /**
+     *
+     * @param cus
+     */
     public void prefill (Customers cus) {
         update = true;
         

@@ -28,6 +28,15 @@ public class Customers {
     private final SimpleStringProperty phone;
     private final Divisions division;
     
+    /**
+     *
+     * @param id
+     * @param name
+     * @param add
+     * @param post
+     * @param phone
+     * @param div
+     */
     public Customers(int id, String name, String add, String post, String phone, Divisions div) {
         this.ID = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);

@@ -5,11 +5,12 @@
  */
 package software_ii_c195;
 
-import java.io.IOException;
 import java.sql.*;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * this class is used to interact with the database
@@ -34,6 +35,11 @@ public class mysql {
     private String verifiedUserLogin;
     
     //Contructor sets up connections and connects
+
+    /**
+     *
+     * @throws SQLException
+     */
     public mysql() throws SQLException{
         System.out.print("Setting up Connection... ");
         String url = "jdbc:" + DBType + "://" + DBUrl +  ":" + DBPort + "/" + DBName + "?autoReconnect=true";
@@ -266,6 +272,8 @@ public class mysql {
     
     /**
      * update appointment list within a specific time frame
+     * @param timeStart
+     * @param timeEnd
      * @throws java.sql.SQLException if connection to database fails
      */
     public void updateAppointmentList(String timeStart, String timeEnd) throws SQLException {
@@ -326,24 +334,26 @@ public class mysql {
      * @return the number of appointments in the range
      * @throws java.sql.SQLException if connection to database fails
      */
-    public int getAppointmentNum(String timeStart, String timeEnd) throws SQLException {
-        int i = 0;
+    public ObservableList<Appointments> getAppointmentList(String timeStart, String timeEnd) throws SQLException {
+        ObservableList<Appointments> appointmentList = FXCollections.observableArrayList();        
         //Setting up SQL query with variables added in        
-        System.out.print("\tSending SQL Query...");
-        String sql = "SELECT * FROM appointments WHERE (End BETWEEN ? AND ?);";
+        //System.out.print("\tSending SQL Query...");
+        //System.out.print(timeStart + " ");
+        String sql = "SELECT * FROM appointments WHERE (Start BETWEEN ? AND ?);";
         PreparedStatement ps = this.conn.prepareStatement(sql);
         ps.setString(1, timeStart);
         ps.setString(2, timeEnd);
         //Execute Query and read result set
         ResultSet rs = ps.executeQuery();
 
-        
         //Adding each line of result set into appointment list
-        System.out.print("Done.\n\tAdding Results to Appointments List...\n");
+        //System.out.print("Done.\n\tAdding Results to Appointments List...\n");
         while(rs.next()) {
-            i++;
+            appointmentList.add(new Appointments(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), Contacts.findContactByID(rs.getInt("Contact_ID")), rs.getString("Type"), rs.getString("Start"), rs.getString("End"), Customers.getCustomerByID(rs.getInt("Customer_ID"))));
         }
-        return i;
+        System.out.println("Appointment List Updated to size: " + appointmentList.size() + "\n\tDone!");
+        
+        return appointmentList;
     }
     
     /**
@@ -497,8 +507,8 @@ public class mysql {
                     "WHERE Start BETWEEN ? AND ?" +
                     "ORDER BY Contact_Name, Start";
         PreparedStatement ps = this.conn.prepareStatement(sql);
-        String today = ZonedDateTime.now(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String tomorrow = ZonedDateTime.now(ZoneId.systemDefault()).plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String today = ZonedDateTime.now(ZoneId.systemDefault()).withHour(0).withMinute(0).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String tomorrow = ZonedDateTime.now(ZoneId.systemDefault()).plusDays(7).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         ps.setString(1, today);
         ps.setString(2, tomorrow);
         
