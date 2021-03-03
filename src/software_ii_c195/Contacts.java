@@ -26,10 +26,10 @@ public class Contacts {
         private final SimpleStringProperty contactEmail;
         
     /**
-     *
-     * @param id
-     * @param name
-     * @param email
+     * The constructor of a contact object
+     * @param id the id of a contact
+     * @param name the name of a contract
+     * @param email the email of a contact
      */
     public Contacts(int id, String name, String email) {
             this.contactID = new SimpleIntegerProperty(id);
@@ -63,6 +63,7 @@ public class Contacts {
         
         /**
          * find contact by Id pass the int id and get the Contact
+         * used by the mysql class to assign a contact to an appointment
          * @param id int ID number of the contact to return
          * @return Contacts the contact of the id
          */
@@ -76,7 +77,8 @@ public class Contacts {
         }
         
         /**
-         * convert contact object to string just the name for the table
+         * convert contact object to string just the name for the main menu table
+         * @return the name of the contact 
          */
         @Override
         public String toString() {

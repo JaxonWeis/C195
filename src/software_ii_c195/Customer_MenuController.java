@@ -41,8 +41,6 @@ public class Customer_MenuController implements Initializable {
 
     /**
      * Initializes the controller class.
-     * @param url
-     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -53,8 +51,8 @@ public class Customer_MenuController implements Initializable {
     //This function is used to prefill the form and set it to update
 
     /**
-     *
-     * @param cus
+     * Prefills the customer menu to allow an user to edit a customer
+     * @param cus the customer object to fill the table
      */
     public void prefill (Customers cus) {
         update = true;
@@ -68,7 +66,9 @@ public class Customer_MenuController implements Initializable {
         Customer_Div.setValue(cus.getDivision());
     }
 
-    //this function runs when the submit button is pressed creates a temp cutomer and sends it to the database
+    /**
+     * Compiles all the menu information when the submit button is hit
+     */
     @FXML
     private void customerSubmit(ActionEvent event) {
         System.out.print("Submit button hit!\ncreating temp customer...");

@@ -18,12 +18,14 @@ import javafx.collections.ObservableList;
  */
 public class mysql {
     
-    //database object all pages use to interact with the database
+    /**
+     * The object used to interact with the database
+     */
     public static mysql database;
     
     //Editable Database data
     private final String DBUser = "U05XJp";
-    private final String DBPassword = "";
+    private final String DBPassword = "53688633129";
     private final String DBUrl = "wgudb.ucertify.com";
     private final String DBPort = "3306";
     private final String DBName = "WJ05XJp";
@@ -37,7 +39,7 @@ public class mysql {
     //Contructor sets up connections and connects
 
     /**
-     *
+     * Constructor used to open the connection to the database
      * @throws SQLException
      */
     public mysql() throws SQLException{
@@ -49,6 +51,7 @@ public class mysql {
 
     /**
      * VerifyUser checks database for user and saves UserID and UserLogin
+     * used by login menu to check user password match
      * @param User user to send to database to retrive the password
      * @param Pass checks the password and compare with retrived password
      * @return true if login passes and false if login fails
@@ -82,6 +85,7 @@ public class mysql {
     
     /**
      * Populates Country List from DB runs once
+     * runs after sucessfull login to fill in the countries list 
      * @throws java.sql.SQLException if connection to database fails
      */
     public void updateCountriesList() throws SQLException {
@@ -105,6 +109,7 @@ public class mysql {
     
     /**
      * Populates Division List from DB runs once
+     * runs after the updatecountryList to match countries with divisions
      * @throws java.sql.SQLException if connection to database fails
      */
     public void updateDivisionsList() throws SQLException {
@@ -127,7 +132,8 @@ public class mysql {
     }
     
     /**
-     * Populates Division List from DB runs once
+     * Populates Contact List from DB runs once
+     * runs shortly after login to populate the contacts list
      * @throws java.sql.SQLException if connection to database fails
      */
     public void updateContactsList() throws SQLException {
@@ -151,6 +157,8 @@ public class mysql {
     
     /**
      * Populates Customer List from DB runs every time customer table modification
+     * runs after division list is updated to match the division with the customer
+     * also runs whenever a customer is added/updated/or deleted to fill in the customer table
      * @throws java.sql.SQLException if connection to database fails
      */
     public void updateCustomerList() throws SQLException {
@@ -174,6 +182,7 @@ public class mysql {
     
     /**
      * Adds a new customer to the DB and refreshes the list
+     * used by the customer menu to add the customer created by the menu into the database
      * @param cus adds the customer to the database
      * @throws java.sql.SQLException if connection to database fails
      */
@@ -200,6 +209,7 @@ public class mysql {
     
     /**
      * Updates an exsisting customer in the DB and refreshes the list
+     * used by the customer menu to update an exsisting customer keeping the same ID number
      * @param cus updates the passed customer
      * @throws java.sql.SQLException if connection to database fails
      */
@@ -226,6 +236,7 @@ public class mysql {
     
     /**
      * Deletes an exsisting customer in the DB and refreshes the list
+     * used by the confirmation thread to delete the customer after confirmation
      * @param cus removes passed customer from the database
      * @throws java.sql.SQLException if connection to database fails
      */
@@ -248,6 +259,7 @@ public class mysql {
     
     /**
      * Updates the appointments list
+     * used by the appointment menu to update an appointment to keep the ID the same
      * @throws java.sql.SQLException if connection to database fails
      */
     public void updateAppointmentList() throws SQLException {
@@ -272,6 +284,7 @@ public class mysql {
     
     /**
      * update appointment list within a specific time frame
+     * used by the main menu to refresh the table with a new time frame
      * @param timeStart
      * @param timeEnd
      * @throws java.sql.SQLException if connection to database fails
@@ -300,6 +313,7 @@ public class mysql {
     
     /**
      * update appointment list within a specific time frame
+     * used by the main menu controller to see if an appointment is within 15 minutes of login time
      * @param timeStart the time appointments have to be after
      * @param timeEnd the time appointments have to be before
      * @throws java.sql.SQLException if connection to database fails
@@ -329,6 +343,7 @@ public class mysql {
     
     /**
      * ability to check if any appoitments in time
+     * used by the appointment menu to pull all appointments the same day as a new one to check for overlap
      * @param timeStart the time appointments have to be after
      * @param timeEnd the time appointments have to be before
      * @return the number of appointments in the range
@@ -358,6 +373,7 @@ public class mysql {
     
     /**
      * Adds an appointment to the DB and refreshes the list at the same timeframe
+     * used by the appointment menu to add an appointment after its been checked and refreshes the table
      * @param app adds the appointment into database
      * @throws java.sql.SQLException if connection to database fails 
      */
@@ -393,6 +409,7 @@ public class mysql {
     
     /**
      * Deletes an Appointment in the DB and refreshes the list at the specific time frame
+     * used by the main menu appointment deletion thread after the deletion was confirmed
      * @param app deletes the passed appointment
      * @throws java.sql.SQLException if connection to database fails
      */
@@ -417,6 +434,8 @@ public class mysql {
     
     /**
      * Deletes all appointments from the DB by the customer ID Number
+     * used by the customer side of the main menu to delete any appointments a customer has before
+     * customer deletion
      * @param cus deletes all appointments for the passed customer
      * @throws java.sql.SQLException if connection to database fails
      */
@@ -441,6 +460,7 @@ public class mysql {
     
     /**
      * Updates an appointment in the DB and refreshes the list
+     * used by the appointment menu after a appointment update is submitted to update it in the database
      * @param app updates the database with the appointment passed
      * @throws java.sql.SQLException if connection to database fails
      */
@@ -475,6 +495,7 @@ public class mysql {
     
     /**
      * Report1 runs the first report gets the result from the Database
+     * used by reports page to fill in the text area
      * @return the report from the database
      * @throws SQLException if database doesnt connect 
      */
@@ -495,6 +516,7 @@ public class mysql {
     
     /**
      * Report2 runs the second report gets the result from the Database
+     * used by the reports page to fill in the text area
      * @return the report from the database
      * @throws SQLException if the database doesnt connect
      */
@@ -504,14 +526,8 @@ public class mysql {
         String sql = "SELECT Contact_Name, Appointment_ID, Title, `Type`, Description, `Start`, `End`, Customer_ID \n" +
                     "FROM appointments\n" +
                     "INNER JOIN contacts USING (Contact_ID)\n" +
-                    "WHERE Start BETWEEN ? AND ?" +
                     "ORDER BY Contact_Name, Start";
         PreparedStatement ps = this.conn.prepareStatement(sql);
-        String today = ZonedDateTime.now(ZoneId.systemDefault()).withHour(0).withMinute(0).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String tomorrow = ZonedDateTime.now(ZoneId.systemDefault()).plusDays(7).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        ps.setString(1, today);
-        ps.setString(2, tomorrow);
-        
         ResultSet rs = ps.executeQuery();
         
         String report = "";
@@ -526,6 +542,7 @@ public class mysql {
     
     /**
      * Report3 runs the third report gets the result from the Database
+     * used by the reports page to fill in the text area
      * @return the report from the database
      * @throws SQLException if the database doesnt connect
      */

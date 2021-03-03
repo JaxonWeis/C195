@@ -24,13 +24,11 @@ public class Divisions{
     private final String name;
     private final Countries country;
     
-    //Contructor
-
     /**
-     *
-     * @param ID
-     * @param name
-     * @param country
+     * the contructor of the Division object
+     * @param ID the id of the division from the database
+     * @param name the name of the division from the database
+     * @param country the country of the division from the database and ran through findCountryById
      */
     public Divisions (int ID, String name, Countries country) {
         this.ID = ID;
@@ -86,7 +84,8 @@ public class Divisions{
     }
     
     /**
-     * return list of divisions  of certain country
+     * return list of divisions of certain country used by the customer menu 
+     * to only show divisions that belong to a country already selected
      * @param country the country to filter divisions with 
      * @return the filtered list of divisions
      */

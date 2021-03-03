@@ -29,13 +29,13 @@ public class Customers {
     private final Divisions division;
     
     /**
-     *
-     * @param id
-     * @param name
-     * @param add
-     * @param post
-     * @param phone
-     * @param div
+     * The constructor for the customer object
+     * @param id the id of the customer from the database
+     * @param name the name of the customer from the database
+     * @param add the address of the customer from the database
+     * @param post the postal code of the customer from the database
+     * @param phone the phone number of the customer from the database
+     * @param div the division object of the customer from the database processed by findDivisionById
      */
     public Customers(int id, String name, String add, String post, String phone, Divisions div) {
         this.ID = new SimpleIntegerProperty(id);
@@ -103,7 +103,8 @@ public class Customers {
     }
     
     /**
-     * return customer object by entering its ID number
+     * return customer object by entering its ID number used by the appointment contructor
+     * to make an appointment object with a customer object
      * @param ID the id of the customer you want returned
      * @return the customer with the matching id number
      */

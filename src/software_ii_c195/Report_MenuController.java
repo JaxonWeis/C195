@@ -23,8 +23,6 @@ public class Report_MenuController implements Initializable {
 
     /**
      * Initializes the controller class.
-     * @param url
-     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -32,8 +30,9 @@ public class Report_MenuController implements Initializable {
     }    
     
     /**
-     *
-     * @param str
+     * Prefills the report box with the report Text
+     * used by the mysql class to output the report to the text area
+     * @param str the text of the report to fill in the text area
      */
     public void prefill(String str){
         textArea.setText(str);   

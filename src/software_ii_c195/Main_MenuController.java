@@ -103,8 +103,6 @@ public class Main_MenuController implements Initializable {
 
     /**
      * Initializes the controller class.
-     * @param url
-     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -215,13 +213,23 @@ public class Main_MenuController implements Initializable {
         new Thread(CDRun).start();
     }
 
+    /**
+     * the class that allows the customer complete pop-up to run on a different thread
+     */
     private class CusDeleteRun implements Runnable {
         Customers selected;
         
+        /**
+         * the contructor Passes the customer to be deleted to the independent thread
+         * @param cus the customer to get deleted
+         */
         public CusDeleteRun(Customers cus){
             selected = cus;
         }
         
+        /**
+         * Confirms the deletion and uses mysql class to remove it from the database
+         */
         @Override
         public void run(){
             if (!ConfirmCustomerDelete(selected)) return;
@@ -285,13 +293,23 @@ public class Main_MenuController implements Initializable {
         new Thread(ADRun).start();
     }
     
+    /**
+     * The class to allow the pop-up to run in another thread
+     */
     private class AppDeleteRun implements Runnable {
         Appointments selected;
         
+        /**
+         * The constructor to pass the application object to be deleted
+         * @param app the application object to be deleted
+         */
         public AppDeleteRun(Appointments app){
             selected = app;
         }
         
+        /**
+         * the thread that confirms the deletion and sends the app object to mysql class for deletion
+         */
         @Override
         public void run(){
             if (!ConfirmAppointmentDelete(selected)) return;
@@ -370,28 +388,41 @@ public class Main_MenuController implements Initializable {
         updateView();
     }
 
+    /**
+     * used by the cusDeleteRun class to confirm deletion with a popup
+     * @param selected the customer object to be deleted
+     * @return true if popup was confirmed
+     */
     private boolean ConfirmCustomerDelete(Customers selected) {
         int i = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + selected.getName() + "?", "Delete Customer?", JOptionPane.YES_NO_OPTION);
         
         return i == 0;
     }
     
+    /**
+     * used by the appDeleteRun class to confirm deletion with a popup
+     * @param selected the customer object to be deleted
+     * @return true if popup was confirmed
+     */
     private boolean ConfirmAppointmentDelete(Appointments selected){
         int i = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + selected.getApointmentID() + ": " + selected.getType() + "?", "Delete Appointment?", JOptionPane.YES_NO_OPTION);
         
         return i == 0;
     }
 
+    // run the first report action button
     @FXML
     private void RunReport1(ActionEvent event) {
         new Reports().Report(1);
     }
 
+    // run the second report action button
     @FXML
     private void RunReport2(ActionEvent event) {
         new Reports().Report(2);
     }
 
+    //runt he third report action button
     @FXML
     private void RunReport3(ActionEvent event) {
         new Reports().Report(3);

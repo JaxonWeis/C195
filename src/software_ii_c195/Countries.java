@@ -23,9 +23,9 @@ public class Countries {
     private final String countryName;
     
     /**
-     *
-     * @param id
-     * @param name
+     * The countries constructor
+     * @param id the id of the country from the database
+     * @param name the name of the country from the database
      */
     public Countries(int id, String name) {
         this.countryID = id;
@@ -33,7 +33,8 @@ public class Countries {
     }
     
     /**
-     * return a country object based on the Id passed
+     * Get a country object based on the Id passed
+     * used by the mysql class to assign a country to a division
      * @param id the id of the country you want to return
      * @return the country of the id entered
      */
@@ -63,7 +64,10 @@ public class Countries {
         return this.countryName;
     }
     
-    //convert object to string just name
+    /**
+     * Returns a nice looking string to display in the customer menu 
+     * @return 
+     */
     @Override
     public String toString() {
         return this.countryName;

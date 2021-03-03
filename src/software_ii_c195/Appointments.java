@@ -39,16 +39,16 @@ public class Appointments {
     //Contructor
 
     /**
-     *
-     * @param ID
-     * @param Title
-     * @param Description
-     * @param Location
-     * @param Contact
-     * @param Type
-     * @param Start
-     * @param End
-     * @param Customer
+     * Constructor of a new appointment
+     * @param ID the set ID of an appointment
+     * @param Title the title of an appointment
+     * @param Description the description of an appointment
+     * @param Location the location of the appointment
+     * @param Contact the contact of the appointment in object form
+     * @param Type the type of the appointment
+     * @param Start the start time of the appointment
+     * @param End the end time of the appointment
+     * @param Customer the customer of the appointment in object form
      */
     public Appointments(int ID, String Title, String Description, String Location, Contacts Contact, String Type, String Start, String End, Customers Customer) {
         this.apointmentID = new SimpleIntegerProperty(ID);

@@ -28,7 +28,7 @@ import javafx.scene.control.Label;
 
 /**
  * FXML Controller class
- *
+ * the appointment add/update menu controller
  * @author Admin
  */
 public class Appointment_MenuController implements Initializable {
@@ -104,7 +104,8 @@ public class Appointment_MenuController implements Initializable {
     }
 
     /**
-     * This function fills in the form from the passed variable and sets update to true
+     * This function fills in the form from the passed variable and sets update to true 
+     * used by the Main Menu controller to fill in the menu
      * @param app the appointment to prefill into the form
      */
     public void prefill (Appointments app) {                                         //PreFill all Customer info
@@ -190,6 +191,12 @@ public class Appointment_MenuController implements Initializable {
         ((Node)(event.getSource())).getScene().getWindow().hide();
     }
     
+    /**
+     * Used to check if a new appointment is in business hours in the appointment menu
+     * before sending it to the database
+     * @param app the appointment to be checked
+     * @return true if it is in business hours
+     */
     private boolean isBussinessHours(Appointments app){
         ZonedDateTime start = app.getStartTimeObj().withZoneSameInstant(ZoneId.of("America/New_York"));
         ZonedDateTime end = app.getEndTimeObj().withZoneSameInstant(ZoneId.of("America/New_York"));
@@ -209,9 +216,9 @@ public class Appointment_MenuController implements Initializable {
     boolean overlapCheck = false;
 
     /**
-     * Check if the new appointment will overlap existing appointments 
-     * @param start Start time of new appointment
-     * @param end End time of new appointments
+     * Check if the new appointment will overlap existing appointments after hitting
+     * the submit button on the appointment menu but before sending it to the database
+     * @param app the appointment object to be checked
      * @return true if overlapping false if appointment is clear
      */
     private boolean isOverlapping(Appointments app){
