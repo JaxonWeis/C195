@@ -129,6 +129,13 @@ public class Appointment_MenuController implements Initializable {
     }    
 
     //function runs when the submit button is pressed if update true send appointment to update if not make an appointment
+    /**
+     * This function runs when the submit button is pressed. <p>It collects all the information from the
+     * form and compiles it into a appointment object. It uses the isBusinessHours function to check
+     * if the new app is in business hours and uses the isOverlapping function to see if the new appointment
+     * overlaps with any other appointment. Then it uses the mysql.AddAppointment function to add the appointment
+     * to the database.
+     */
     @FXML
     private void AppSubmit(ActionEvent event) {
         String tmp;
@@ -169,6 +176,7 @@ public class Appointment_MenuController implements Initializable {
             return;
         }
         
+        //We need to check if the new appointment will overlap any existing appointment
         if(isOverlapping(app)){
             ErrorMsg.setText("Selected Times are overlapping another appointment");
             return;
@@ -218,6 +226,10 @@ public class Appointment_MenuController implements Initializable {
     /**
      * Check if the new appointment will overlap existing appointments after hitting
      * the submit button on the appointment menu but before sending it to the database
+     * <p>This is used in Appointment_MenuController.AppSubmit. After the user hit submit on a new
+     * or modifying appointment the generated appointment will be passed to isOverlapping to see if the
+     * Appointment overlaps with any other appointment
+     * @see AppSubmit
      * @param app the appointment object to be checked
      * @return true if overlapping false if appointment is clear
      */

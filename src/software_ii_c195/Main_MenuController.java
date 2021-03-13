@@ -202,45 +202,30 @@ public class Main_MenuController implements Initializable {
         }
     }
 
-    //get the selected customer from the table and delete it from the database with a new thread
+    /**
+     * This function runs when the Customer Delete button is pressed.
+     * <p> This function grabs the selected customer from the customer table, if there is
+     * one selected. Then it will start a new thread that will open a pop-up box to ask
+     * if you are sure you want to delete the customer. If the user hits ok then the selected 
+     * customer gets passed to mysql.deleteCustomer() to be removed from the database
+     */
     @FXML
     private void customerDelete(ActionEvent event) {
         Customers selected = Customer_Table.getSelectionModel().getSelectedItem();
         
         if(selected == null) return;
         
-        CusDeleteRun CDRun = new CusDeleteRun(selected);
-        new Thread(CDRun).start();
-    }
-
-    /**
-     * the class that allows the customer complete pop-up to run on a different thread
-     */
-    private class CusDeleteRun implements Runnable {
-        Customers selected;
-        
-        /**
-         * the contructor Passes the customer to be deleted to the independent thread
-         * @param cus the customer to get deleted
-         */
-        public CusDeleteRun(Customers cus){
-            selected = cus;
-        }
-        
-        /**
-         * Confirms the deletion and uses mysql class to remove it from the database
-         */
-        @Override
-        public void run(){
-            if (!ConfirmCustomerDelete(selected)) return;
+        Runnable CDRun =
+        () -> { if (!ConfirmCustomerDelete(selected)) return;
             
-            try {
-                mysql.database.deleteCustomer(selected);
-            }
-            catch (SQLException e) {
-                System.out.println("SQL ERROR!!!" + e);
-            }
-        }
+                try {
+                    mysql.database.deleteCustomer(selected);
+                }
+                catch (SQLException e) {
+                    System.out.println("SQL ERROR!!!" + e);
+                } };
+        Thread thread = new Thread(CDRun);
+        thread.start();
     }
     
     //Open the appointment menu
@@ -283,44 +268,33 @@ public class Main_MenuController implements Initializable {
         }
     }
 
-    //get the selected appointment and delete it from the database with a new thread
+    /**
+     * When the appointment delete button is pressed this function will run
+     * <p>This function will pull the appointment that is selected and make sure an appointment
+     * was selected. It will start a new thread to confirm if the user wants to delete the appointment with
+     * a popup. Once the popup was confirmed then it will pass the selected appointment to 
+     * mysql.deleteAppointment() to remove it from the database.
+     */
     @FXML
     private void appointmentDelete(ActionEvent event) {
         Appointments selected = Appointment_Table.getSelectionModel().getSelectedItem();
         
         if(selected == null) return;
-        AppDeleteRun ADRun = new AppDeleteRun(selected);
-        new Thread(ADRun).start();
-    }
-    
-    /**
-     * The class to allow the pop-up to run in another thread
-     */
-    private class AppDeleteRun implements Runnable {
-        Appointments selected;
         
-        /**
-         * The constructor to pass the application object to be deleted
-         * @param app the application object to be deleted
-         */
-        public AppDeleteRun(Appointments app){
-            selected = app;
-        }
+        //AppDeleteRun ADRun = new AppDeleteRun(selected);
+        //new Thread(ADRun).start();
         
-        /**
-         * the thread that confirms the deletion and sends the app object to mysql class for deletion
-         */
-        @Override
-        public void run(){
-            if (!ConfirmAppointmentDelete(selected)) return;
+        Runnable ADRun =
+            () -> { if (!ConfirmAppointmentDelete(selected)) return;
             
             try {
                 mysql.database.deleteAppointment(selected);
             }
             catch (SQLException e) {
                 System.out.println("SQL ERROR!!!" + e);
-            }
-        }
+            } };
+        Thread thread = new Thread(ADRun);
+        thread.start();
     }
 
     //On radio button change update the timeline 

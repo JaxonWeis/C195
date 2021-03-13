@@ -84,6 +84,13 @@ public class Login_MenuController implements Initializable {
     }    
 
     //Run this function when login button hit
+    /**
+     * This function verifys collects the user password input from the form. 
+     * <p>This function grabs the login user and password information. Passes them to the
+     * mysql.verifyUser function to determine if the user password combination exist in the database. 
+     * <p>If true the login_Menu closes and opens the Main_Menu
+     * <p>If false it writes login failed to the log file and to the error message part of the login page
+     */
     @FXML
     private void login_Action(ActionEvent event) {
         System.out.println("Login Button hit...");
@@ -96,7 +103,7 @@ public class Login_MenuController implements Initializable {
         String Pass = Login_Password.getText();
         boolean verifyUser = false;
         
-        //Check database for matching username and password
+        //We need to check the user and password against the database to securly log in
         try {
             verifyUser = mysql.database.verifyUser(User, Pass);
         }

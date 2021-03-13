@@ -52,6 +52,7 @@ public class mysql {
     /**
      * VerifyUser checks database for user and saves UserID and UserLogin
      * used by login menu to check user password match
+     * <p>Used by Login_MenuContoller.Login_Action to check user and password from the login form
      * @param User user to send to database to retrive the password
      * @param Pass checks the password and compare with retrived password
      * @return true if login passes and false if login fails
