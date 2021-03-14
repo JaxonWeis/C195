@@ -1,4 +1,4 @@
-                                    CalenDo v1.0 2/23/2020
+                                    CalenDo v1.0 3/12/2020
 
 Created by:
 Jaxon Weis
@@ -32,3 +32,5 @@ System: Windows 10 version 10.0 running on amd64; Cp1252; en_US (nb)
 Lambda expressions:
 Main_MenuController.customerDelete
 Main_MenuController.appointmentDelete
+
+Passed requirements after 6 attempts
