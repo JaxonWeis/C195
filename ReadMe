@@ -1,0 +1,36 @@
+                                    CalenDo v1.0 3/12/2020
+
+Created by:
+Jaxon Weis
+Jaxon.Weis@gmail.com
+
+
+The purpose of this application is to pass class C195 requirements. This application
+Takes in customer information and creates appointments that can be view and edited at
+any time. All of the customer information and appointment information is stored in a
+database that can be edited in the mysql class.
+
+To use the application first launch the application. You will be presented with the
+CalenDo login screen where you can input your user name and password. (Default test:test)
+After successful login you will be at the CalenDo Main Screen. This will have 2 tabs 
+Appointments and Customers. If you have an appointment within 15 minutes of getting this
+page the bottom edge of the window will show the next appointment in red with the start
+time. On the Appointments tab you can seek for appointments with the left and right buttons
+seeking by month or week depending on the selected view. The selected view toggle buttons
+can also widen or narrow your view to a week or a month. You can also add update or delete
+appointments. Make sure the appointment is selected when updating or deleting. Similar 
+functionality can be found in the customer tab.  
+
+The Third report returns all of the appointments for the year by customer name.
+
+
+Product Version: Apache NetBeans IDE 11.1
+Java: 11.0.10; Java HotSpot(TM) 64-Bit Server VM 11.0.10+8-LTS-162
+Runtime: Java(TM) SE Runtime Environment 11.0.10+8-LTS-162
+System: Windows 10 version 10.0 running on amd64; Cp1252; en_US (nb)
+
+Lambda expressions:
+Main_MenuController.customerDelete
+Main_MenuController.appointmentDelete
+
+Passed requirements after 6 attempts
